@@ -1,0 +1,10 @@
+FIR009
+
+Person: Indra
+Phone: 7895424885
+Vehicle: KA01AB1254
+Location: 100 Feet Road Indiranagar Bengaluru
+
+Crime Category: Property Crime
+Crime Major Head: Robbery / Dacoity
+Police Station: Central Police Station
