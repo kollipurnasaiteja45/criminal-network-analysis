@@ -28,89 +28,56 @@
         /* ================================================= */
 
         .sidebar {
-
             position: fixed;
-
             left: 0;
             top: 0;
-
             width: 270px;
             height: 100vh;
-
             background: #0f172a;
-
             color: white;
-
             padding: 25px 18px;
-
+            z-index: 100;
         }
 
         .logo {
-
             font-size: 23px;
-
             font-weight: bold;
-
             margin-bottom: 8px;
-
         }
 
         .subtitle {
-
             color: #94a3b8;
-
             font-size: 13px;
-
             margin-bottom: 35px;
-
         }
 
         .section-title {
-
             color: #64748b;
-
             font-size: 12px;
-
             font-weight: bold;
-
             margin: 25px 12px 10px;
-
             text-transform: uppercase;
-
         }
 
         .menu a {
-
             display: block;
-
             text-decoration: none;
-
             color: #cbd5e1;
-
             padding: 13px 15px;
-
             border-radius: 10px;
-
             margin-bottom: 5px;
-
             font-size: 15px;
-
+            transition: 0.2s;
         }
 
         .menu a:hover {
-
             background: #1e293b;
-
             color: white;
-
         }
 
         .menu a.active {
-
             background: #2563eb;
-
             color: white;
-
         }
 
         /* ================================================= */
@@ -118,11 +85,8 @@
         /* ================================================= */
 
         .main {
-
             margin-left: 270px;
-
             min-height: 100vh;
-
         }
 
         /* ================================================= */
@@ -130,67 +94,39 @@
         /* ================================================= */
 
         .topbar {
-
             height: 70px;
-
             background: white;
-
             border-bottom: 1px solid #e2e8f0;
-
             display: flex;
-
             align-items: center;
-
             justify-content: space-between;
-
             padding: 0 30px;
-
         }
 
         .search {
-
             width: 470px;
-
             padding: 13px 18px;
-
             border: 1px solid #dbe3ee;
-
             border-radius: 25px;
-
             color: #94a3b8;
-
         }
 
         .officer {
-
             display: flex;
-
             align-items: center;
-
             gap: 10px;
-
             font-weight: bold;
-
         }
 
         .avatar {
-
             width: 38px;
-
             height: 38px;
-
             border-radius: 50%;
-
             background: #2563eb;
-
             color: white;
-
             display: flex;
-
             align-items: center;
-
             justify-content: center;
-
         }
 
         /* ================================================= */
@@ -198,57 +134,35 @@
         /* ================================================= */
 
         .content {
-
             padding: 35px;
-
             max-width: 1250px;
-
             margin: auto;
-
         }
 
         .heading {
-
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
             margin-bottom: 25px;
-
         }
 
         .heading h1 {
-
             margin: 0;
-
             font-size: 30px;
-
         }
 
         .heading p {
-
             margin-top: 7px;
-
             color: #64748b;
-
         }
 
         .badge {
-
             background: #ecfdf5;
-
             color: #047857;
-
             border: 1px solid #a7f3d0;
-
             padding: 10px 18px;
-
             border-radius: 25px;
-
             font-weight: bold;
-
         }
 
         /* ================================================= */
@@ -256,41 +170,34 @@
         /* ================================================= */
 
         .tabs {
-
             background: white;
-
             padding: 5px;
-
             border-radius: 15px;
-
             display: flex;
-
             margin-bottom: 25px;
-
             box-shadow: 0 2px 8px rgba(0,0,0,.05);
-
         }
 
         .tab {
-
             flex: 1;
-
             text-align: center;
-
             padding: 14px;
-
             border-radius: 12px;
-
             font-weight: bold;
-
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 15px;
+            color: #475569;
         }
 
         .tab.active {
-
             background: #2563eb;
-
             color: white;
+        }
 
+        .tab:hover:not(.active) {
+            background: #eff6ff;
         }
 
         /* ================================================= */
@@ -298,29 +205,18 @@
         /* ================================================= */
 
         .card {
-
             background: white;
-
             border: 1px solid #e2e8f0;
-
             border-radius: 18px;
-
             padding: 28px;
-
             margin-bottom: 22px;
-
             box-shadow: 0 3px 10px rgba(15,23,42,.04);
-
         }
 
         .card h2 {
-
             font-size: 20px;
-
             margin-top: 0;
-
             margin-bottom: 25px;
-
         }
 
         /* ================================================= */
@@ -328,72 +224,46 @@
         /* ================================================= */
 
         .grid {
-
             display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-
         }
 
         .full {
-
             grid-column: 1 / -1;
-
         }
 
         label {
-
             display: block;
-
             font-size: 14px;
-
             font-weight: bold;
-
             margin-bottom: 8px;
-
         }
 
         input,
         select,
         textarea {
-
             width: 100%;
-
             padding: 13px 14px;
-
             border: 1px solid #dbe3ee;
-
             border-radius: 10px;
-
             font-size: 15px;
-
             outline: none;
-
             background: white;
-
         }
 
         input:focus,
         select:focus,
         textarea:focus {
-
             border-color: #2563eb;
-
             box-shadow:
                 0 0 0 3px
                 rgba(37,99,235,.1);
-
         }
 
         textarea {
-
             min-height: 110px;
-
             resize: vertical;
-
         }
 
         /* ================================================= */
@@ -401,53 +271,39 @@
         /* ================================================= */
 
         .actions {
-
             display: flex;
-
             justify-content: flex-end;
-
             gap: 12px;
-
             margin-top: 25px;
-
         }
 
         .btn {
-
             border: none;
-
             padding: 13px 24px;
-
             border-radius: 10px;
-
             font-size: 15px;
-
             font-weight: bold;
-
             cursor: pointer;
-
+            text-decoration: none;
+            display: inline-block;
         }
 
         .btn-primary {
-
             background: #2563eb;
-
             color: white;
-
         }
 
         .btn-primary:hover {
-
             background: #1d4ed8;
-
         }
 
         .btn-secondary {
-
             background: #e2e8f0;
-
             color: #334155;
+        }
 
+        .btn-secondary:hover {
+            background: #cbd5e1;
         }
 
         /* ================================================= */
@@ -455,37 +311,138 @@
         /* ================================================= */
 
         .success {
-
             background: #dcfce7;
-
             border-left: 5px solid #16a34a;
-
             padding: 18px;
-
             border-radius: 10px;
-
             color: #166534;
-
             margin-bottom: 20px;
-
         }
 
         .error {
-
             background: #fee2e2;
-
             border-left: 5px solid #dc2626;
-
             padding: 18px;
-
             border-radius: 10px;
-
             color: #991b1b;
-
             margin-bottom: 20px;
-
             white-space: pre-line;
+        }
 
+        /* ================================================= */
+        /* UPLOAD FIR */
+        /* ================================================= */
+
+        .upload-card {
+            animation: fadeIn 0.25s ease;
+        }
+
+        .upload-box {
+            border: 2px dashed #cbd5e1;
+            border-radius: 18px;
+            padding: 55px 30px;
+            text-align: center;
+            background: #f8fafc;
+            transition: 0.2s;
+        }
+
+        .upload-box:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .upload-icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .upload-box h3 {
+            margin: 5px 0 10px;
+            font-size: 21px;
+        }
+
+        .upload-box p {
+            color: #64748b;
+            margin-bottom: 22px;
+        }
+
+        .file-input-wrapper {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            background: white;
+            cursor: pointer;
+        }
+
+        .upload-status {
+            margin-top: 20px;
+        }
+
+        .extract-success {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 5px solid #16a34a;
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        .extract-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 5px solid #dc2626;
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        .extract-loading {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-left: 5px solid #2563eb;
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        /* ================================================= */
+        /* EXTRACTED DATA PREVIEW */
+        /* ================================================= */
+
+        .extracted-preview {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+        }
+
+        .extracted-preview h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .preview-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .preview-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .preview-value {
+            font-weight: bold;
+            color: #1e293b;
         }
 
         /* ================================================= */
@@ -495,27 +452,61 @@
         @media(max-width: 900px) {
 
             .sidebar {
-
                 display: none;
-
             }
 
             .main {
-
                 margin-left: 0;
-
             }
 
             .grid {
-
                 grid-template-columns: 1fr;
+            }
 
+            .preview-grid {
+                grid-template-columns: 1fr;
             }
 
             .search {
-
                 width: 250px;
+            }
 
+            .heading {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+
+        @media(max-width: 600px) {
+
+            .content {
+                padding: 20px;
+            }
+
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .search {
+                display: none;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+        }
+
+        @keyframes fadeIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
 
         }
@@ -656,6 +647,8 @@
     <div class="content">
 
 
+        <!-- HEADING -->
+
         <div class="heading">
 
             <div>
@@ -738,456 +731,1084 @@
 
         <div class="tabs">
 
-            <div class="tab active">
+            <button
+                type="button"
+                class="tab active"
+                onclick="showTab('manualTab', this)"
+            >
                 📄 Single FIR Registration Form
-            </div>
+            </button>
 
-            <div class="tab">
+            <button
+                type="button"
+                class="tab"
+                onclick="showTab('uploadTab', this)"
+            >
                 ✨ Upload FIR File
+            </button>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- UPLOAD TAB -->
+        <!-- ================================================= -->
+
+        <div
+            id="uploadTab"
+            class="upload-card"
+            style="display:none;"
+        >
+
+            <div class="card">
+
+                <h2>
+                    ✨ Upload FIR File & AI Extraction
+                </h2>
+
+                <p style="color:#64748b; margin-top:-15px;">
+
+                    Upload a FIR PDF or TXT document.
+                    The system will extract available FIR
+                    information and fill the registration form.
+
+                </p>
+
+
+                <div class="upload-box">
+
+                    <div class="upload-icon">
+                        📄
+                    </div>
+
+                    <h3>
+                        Upload FIR Document
+                    </h3>
+
+                    <p>
+                        Supported formats: PDF and TXT
+                    </p>
+
+
+                    <div class="file-input-wrapper">
+
+                        <input
+                            type="file"
+                            id="firFile"
+                            name="fir_file"
+                            accept=".pdf,.txt"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        onclick="extractFIR()"
+                        style="margin-top:18px;"
+                    >
+                        ✨ Extract FIR Details
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="uploadStatus"
+                    class="upload-status"
+                    style="display:none;"
+                >
+                </div>
+
+
+                <div
+                    id="extractedPreview"
+                    class="extracted-preview"
+                    style="display:none;"
+                >
+
+                    <h3>
+                        ✓ Extracted FIR Information
+                    </h3>
+
+                    <div
+                        id="previewGrid"
+                        class="preview-grid"
+                    >
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
 
 
         <!-- ================================================= -->
-        <!-- FORM -->
+        <!-- MANUAL TAB -->
         <!-- ================================================= -->
 
-        <form
-            action="/add-fir"
-            method="POST"
-        >
+        <div id="manualTab">
 
 
-            <!-- ============================================= -->
-            <!-- CASE IDENTIFICATION -->
-            <!-- ============================================= -->
-
-            <div class="card">
-
-                <h2>
-                    🏢 Case Identification & Station Details
-                </h2>
+            <form
+                action="/add-fir"
+                method="POST"
+            >
 
 
-                <div class="grid">
+                <!-- ============================================= -->
+                <!-- CASE IDENTIFICATION -->
+                <!-- ============================================= -->
+
+                <div class="card">
+
+                    <h2>
+                        🏢 Case Identification & Station Details
+                    </h2>
 
 
-                    <div>
-
-                        <label>
-                            Crime / FIR Number
-                        </label>
-
-                        <input
-                            type="text"
-                            name="fir_id"
-                            value="{{ fir_id|default(next_fir) }}"
-                            placeholder="FIR-2026-213471"
-                            required
-                        >
-
-                    </div>
+                    <div class="grid">
 
 
-                    <div>
+                        <!-- FIR -->
 
-                        <label>
-                            Police Station
-                        </label>
+                        <div>
 
-                        <select
-                            name="police_station"
-                            required
-                        >
+                            <label>
+                                Crime / FIR Number
+                            </label>
 
-                            <option value="">
-                                Select Police Station
-                            </option>
-
-                            <option
-                                {% if police_station|default("") == "Central Police Station" %}
-                                selected
-                                {% endif %}
+                            <input
+                                type="text"
+                                name="fir_id"
+                                value="{{ fir_id|default(next_fir) }}"
+                                placeholder="FIR009"
+                                required
                             >
-                                Central Police Station
-                            </option>
 
-                            <option
-                                {% if police_station|default("") == "Indiranagar Police Station" %}
-                                selected
-                                {% endif %}
+                        </div>
+
+
+                        <!-- POLICE STATION -->
+
+                        <div>
+
+                            <label>
+                                Police Station
+                            </label>
+
+                            <select
+                                name="police_station"
+                                required
                             >
-                                Indiranagar Police Station
-                            </option>
 
-                            <option
-                                {% if police_station|default("") == "MG Road Police Station" %}
-                                selected
-                                {% endif %}
+                                <option value="">
+                                    Select Police Station
+                                </option>
+
+                                <option
+                                    value="Central Police Station"
+                                    {% if police_station|default("") == "Central Police Station" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Central Police Station
+                                </option>
+
+                                <option
+                                    value="Indiranagar Police Station"
+                                    {% if police_station|default("") == "Indiranagar Police Station" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Indiranagar Police Station
+                                </option>
+
+                                <option
+                                    value="MG Road Police Station"
+                                    {% if police_station|default("") == "MG Road Police Station" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    MG Road Police Station
+                                </option>
+
+                                <option
+                                    value="City Police Station"
+                                    {% if police_station|default("") == "City Police Station" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    City Police Station
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- GRAVITY -->
+
+                        <div>
+
+                            <label>
+                                Offence Gravity
+                            </label>
+
+                            <select
+                                name="offence_gravity"
+                                required
                             >
-                                MG Road Police Station
-                            </option>
 
-                            <option
-                                {% if police_station|default("") == "City Police Station" %}
-                                selected
-                                {% endif %}
+                                <option value="">
+                                    Select Gravity
+                                </option>
+
+                                <option
+                                    value="Heinous Offence"
+                                    {% if offence_gravity|default("") == "Heinous Offence" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Heinous Offence
+                                </option>
+
+                                <option
+                                    value="Serious Offence"
+                                    {% if offence_gravity|default("") == "Serious Offence" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Serious Offence
+                                </option>
+
+                                <option
+                                    value="Moderate Offence"
+                                    {% if offence_gravity|default("") == "Moderate Offence" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Moderate Offence
+                                </option>
+
+                                <option
+                                    value="Minor Offence"
+                                    {% if offence_gravity|default("") == "Minor Offence" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Minor Offence
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- CATEGORY -->
+
+                        <div>
+
+                            <label>
+                                Crime Category
+                            </label>
+
+                            <select
+                                name="crime_category"
+                                required
                             >
-                                City Police Station
-                            </option>
 
-                        </select>
+                                <option value="">
+                                    Select Category
+                                </option>
 
-                    </div>
+                                <option
+                                    value="Property Crime"
+                                    {% if crime_category|default("") == "Property Crime" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Property Crime
+                                </option>
+
+                                <option
+                                    value="Cyber Crime"
+                                    {% if crime_category|default("") == "Cyber Crime" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Cyber Crime
+                                </option>
+
+                                <option
+                                    value="Violent Crime"
+                                    {% if crime_category|default("") == "Violent Crime" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Violent Crime
+                                </option>
+
+                                <option
+                                    value="Fraud"
+                                    {% if crime_category|default("") == "Fraud" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Fraud
+                                </option>
+
+                                <option
+                                    value="Drug Offence"
+                                    {% if crime_category|default("") == "Drug Offence" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Drug Offence
+                                </option>
+
+                            </select>
+
+                        </div>
 
 
-                    <div>
+                        <!-- MAJOR HEAD -->
 
-                        <label>
-                            Offence Gravity
-                        </label>
+                        <div>
 
-                        <select
-                            name="offence_gravity"
-                            required
-                        >
+                            <label>
+                                Crime Major Head
+                            </label>
 
-                            <option value="">
-                                Select Gravity
-                            </option>
-
-                            <option
-                                {% if offence_gravity|default("") == "Heinous Offence" %}
-                                selected
-                                {% endif %}
+                            <input
+                                type="text"
+                                name="crime_major_head"
+                                value="{{ crime_major_head|default('') }}"
+                                placeholder="Robbery / Dacoity"
+                                required
                             >
-                                Heinous Offence
-                            </option>
 
-                            <option
-                                {% if offence_gravity|default("") == "Serious Offence" %}
-                                selected
-                                {% endif %}
+                        </div>
+
+
+                        <!-- ACT SECTIONS -->
+
+                        <div>
+
+                            <label>
+                                Applicable IPC / Act Sections
+                            </label>
+
+                            <input
+                                type="text"
+                                name="act_sections"
+                                value="{{ act_sections|default('') }}"
+                                placeholder="IPC 392, IPC 34"
+                                required
                             >
-                                Serious Offence
-                            </option>
 
-                            <option
-                                {% if offence_gravity|default("") == "Moderate Offence" %}
-                                selected
-                                {% endif %}
-                            >
-                                Moderate Offence
-                            </option>
-
-                            <option
-                                {% if offence_gravity|default("") == "Minor Offence" %}
-                                selected
-                                {% endif %}
-                            >
-                                Minor Offence
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div>
-
-                        <label>
-                            Crime Category
-                        </label>
-
-                        <select
-                            name="crime_category"
-                            required
-                        >
-
-                            <option value="">
-                                Select Category
-                            </option>
-
-                            <option
-                                {% if crime_category|default("") == "Property Crime" %}
-                                selected
-                                {% endif %}
-                            >
-                                Property Crime
-                            </option>
-
-                            <option
-                                {% if crime_category|default("") == "Cyber Crime" %}
-                                selected
-                                {% endif %}
-                            >
-                                Cyber Crime
-                            </option>
-
-                            <option
-                                {% if crime_category|default("") == "Violent Crime" %}
-                                selected
-                                {% endif %}
-                            >
-                                Violent Crime
-                            </option>
-
-                            <option
-                                {% if crime_category|default("") == "Fraud" %}
-                                selected
-                                {% endif %}
-                            >
-                                Fraud
-                            </option>
-
-                            <option
-                                {% if crime_category|default("") == "Drug Offence" %}
-                                selected
-                                {% endif %}
-                            >
-                                Drug Offence
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div>
-
-                        <label>
-                            Crime Major Head
-                        </label>
-
-                        <input
-                            type="text"
-                            name="crime_major_head"
-                            value="{{ crime_major_head|default('') }}"
-                            placeholder="Robbery / Dacoity"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div>
-
-                        <label>
-                            Applicable IPC / Act Sections
-                        </label>
-
-                        <input
-                            type="text"
-                            name="act_sections"
-                            value="{{ act_sections|default('') }}"
-                            placeholder="IPC 392, IPC 34"
-                            required
-                        >
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- ============================================= -->
-            <!-- TIME AND LOCATION -->
-            <!-- ============================================= -->
-
-            <div class="card">
-
-                <h2>
-                    📍 Time & Location Details
-                </h2>
-
-
-                <div class="grid">
-
-
-                    <div>
-
-                        <label>
-                            Incident Date
-                        </label>
-
-                        <input
-                            type="date"
-                            name="incident_date"
-                            value="{{ incident_date|default('') }}"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div>
-
-                        <label>
-                            Registration Date
-                        </label>
-
-                        <input
-                            type="date"
-                            name="registration_date"
-                            value="{{ registration_date|default('') }}"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div>
-
-                        <label>
-                            District / Jurisdiction
-                        </label>
-
-                        <input
-                            type="text"
-                            name="district"
-                            value="{{ district|default('') }}"
-                            placeholder="Bengaluru Urban"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="full">
-
-                        <label>
-                            Exact Incident Location / Address
-                        </label>
-
-                        <input
-                            type="text"
-                            name="incident_location"
-                            value="{{ incident_location|default('') }}"
-                            placeholder="100 Feet Road, Indiranagar, Bengaluru"
-                            required
-                        >
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- ============================================= -->
-            <!-- PERSON DETAILS -->
-            <!-- ============================================= -->
-
-            <div class="card">
-
-                <h2>
-                    👤 Person & Identification Details
-                </h2>
-
-
-                <div class="grid">
-
-
-                    <div>
-
-                        <label>
-                            Person / Accused Name
-                        </label>
-
-                        <input
-                            type="text"
-                            name="person"
-                            value="{{ person|default('') }}"
-                            placeholder="Ravi Kumar"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div>
-
-                        <label>
-                            Mobile Number
-                        </label>
-
-                        <input
-                            type="text"
-                            name="phone"
-                            value="{{ phone|default('') }}"
-                            placeholder="9876543210"
-                            maxlength="10"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div>
-
-                        <label>
-                            Vehicle Number
-                        </label>
-
-                        <input
-                            type="text"
-                            name="vehicle"
-                            value="{{ vehicle|default('') }}"
-                            placeholder="AP01AB1234"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="full">
-
-                        <label>
-                            Case Description
-                        </label>
-
-                        <textarea
-                            name="description"
-                            placeholder="Enter a brief description of the incident..."
-                        >{{ description|default('') }}</textarea>
+                        </div>
 
                     </div>
 
                 </div>
 
 
-                <!-- ========================================= -->
-                <!-- BUTTONS -->
-                <!-- ========================================= -->
+                <!-- ============================================= -->
+                <!-- TIME AND LOCATION -->
+                <!-- ============================================= -->
 
-                <div class="actions">
+                <div class="card">
 
-                    <a
-                        href="/cases"
-                        class="btn btn-secondary"
-                        style="text-decoration:none;"
-                    >
-                        Cancel
-                    </a>
+                    <h2>
+                        📍 Time & Location Details
+                    </h2>
 
-                    <button
-                        type="submit"
-                        class="btn btn-primary"
-                    >
-                        ✓ Register FIR
-                    </button>
+
+                    <div class="grid">
+
+
+                        <!-- INCIDENT DATE -->
+
+                        <div>
+
+                            <label>
+                                Incident Date
+                            </label>
+
+                            <input
+                                type="date"
+                                name="incident_date"
+                                value="{{ incident_date|default('') }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- REGISTRATION DATE -->
+
+                        <div>
+
+                            <label>
+                                Registration Date
+                            </label>
+
+                            <input
+                                type="date"
+                                name="registration_date"
+                                value="{{ registration_date|default('') }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- DISTRICT -->
+
+                        <div>
+
+                            <label>
+                                District / Jurisdiction
+                            </label>
+
+                            <input
+                                type="text"
+                                name="district"
+                                value="{{ district|default('') }}"
+                                placeholder="Bengaluru Urban"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- LOCATION -->
+
+                        <div class="full">
+
+                            <label>
+                                Exact Incident Location / Address
+                            </label>
+
+                            <input
+                                type="text"
+                                name="incident_location"
+                                value="{{ incident_location|default('') }}"
+                                placeholder="100 Feet Road, Indiranagar, Bengaluru"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-            </div>
 
-        </form>
+                <!-- ============================================= -->
+                <!-- PERSON DETAILS -->
+                <!-- ============================================= -->
+
+                <div class="card">
+
+                    <h2>
+                        👤 Person & Identification Details
+                    </h2>
+
+
+                    <div class="grid">
+
+
+                        <!-- PERSON -->
+
+                        <div>
+
+                            <label>
+                                Person / Accused Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="person"
+                                value="{{ person|default('') }}"
+                                placeholder="Ravi Kumar"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- PHONE -->
+
+                        <div>
+
+                            <label>
+                                Mobile Number
+                            </label>
+
+                            <input
+                                type="text"
+                                name="phone"
+                                value="{{ phone|default('') }}"
+                                placeholder="9876543210"
+                                maxlength="10"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- VEHICLE -->
+
+                        <div>
+
+                            <label>
+                                Vehicle Number
+                            </label>
+
+                            <input
+                                type="text"
+                                name="vehicle"
+                                value="{{ vehicle|default('') }}"
+                                placeholder="AP01AB1234"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+
+                        <div class="full">
+
+                            <label>
+                                Case Description
+                            </label>
+
+                            <textarea
+                                name="description"
+                                placeholder="Enter a brief description of the incident..."
+                            >{{ description|default('') }}</textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="actions">
+
+                        <a
+                            href="/cases"
+                            class="btn btn-secondary"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            ✓ Register FIR
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
 
     </div>
 
 </div>
+
+
+<!-- ===================================================== -->
+<!-- JAVASCRIPT -->
+<!-- ===================================================== -->
+
+<script>
+
+
+/* ===================================================== */
+/* TAB SWITCHING */
+/* ===================================================== */
+
+function showTab(tabId, button) {
+
+    const manualTab =
+        document.getElementById("manualTab");
+
+    const uploadTab =
+        document.getElementById("uploadTab");
+
+    const tabs =
+        document.querySelectorAll(".tab");
+
+
+    tabs.forEach(function(tab) {
+
+        tab.classList.remove("active");
+
+    });
+
+
+    button.classList.add("active");
+
+
+    if (tabId === "manualTab") {
+
+        manualTab.style.display = "block";
+
+        uploadTab.style.display = "none";
+
+    }
+
+    else {
+
+        manualTab.style.display = "none";
+
+        uploadTab.style.display = "block";
+
+    }
+
+}
+
+
+/* ===================================================== */
+/* EXTRACT FIR */
+/* ===================================================== */
+
+async function extractFIR() {
+
+
+    const fileInput =
+        document.getElementById("firFile");
+
+    const status =
+        document.getElementById("uploadStatus");
+
+    const preview =
+        document.getElementById("extractedPreview");
+
+    const previewGrid =
+        document.getElementById("previewGrid");
+
+
+    /* CHECK FILE */
+
+    if (!fileInput.files.length) {
+
+        status.style.display = "block";
+
+        status.innerHTML = `
+            <div class="extract-error">
+                ⚠ Please select a FIR PDF or TXT file first.
+            </div>
+        `;
+
+        preview.style.display = "none";
+
+        return;
+    }
+
+
+    const file =
+        fileInput.files[0];
+
+
+    /* CHECK EXTENSION */
+
+    const allowedExtensions =
+        [".pdf", ".txt"];
+
+
+    const extension =
+        file.name
+        .substring(file.name.lastIndexOf("."))
+        .toLowerCase();
+
+
+    if (!allowedExtensions.includes(extension)) {
+
+        status.style.display = "block";
+
+        status.innerHTML = `
+            <div class="extract-error">
+                ❌ Only PDF and TXT files are supported.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    /* CREATE FORM DATA */
+
+    const formData =
+        new FormData();
+
+    formData.append(
+        "fir_file",
+        file
+    );
+
+
+    /* LOADING */
+
+    status.style.display = "block";
+
+    status.innerHTML = `
+        <div class="extract-loading">
+            ⏳ Extracting FIR information...
+            <br>
+            Please wait.
+        </div>
+    `;
+
+    preview.style.display = "none";
+
+
+    try {
+
+
+        /* SEND TO FLASK */
+
+        const response =
+            await fetch(
+                "/add-fir/extract",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        /* ERROR */
+
+        if (!response.ok || !result.success) {
+
+            throw new Error(
+                result.error ||
+                "Unable to extract FIR information."
+            );
+
+        }
+
+
+        /* EXTRACTED DATA */
+
+        const data =
+            result.data;
+
+
+        /* FILL FORM */
+
+        setField(
+            "fir_id",
+            data.fir_id
+        );
+
+        setField(
+            "police_station",
+            data.police_station
+        );
+
+        setField(
+            "offence_gravity",
+            data.offence_gravity
+        );
+
+        setField(
+            "crime_category",
+            data.crime_category
+        );
+
+        setField(
+            "crime_major_head",
+            data.crime_major_head
+        );
+
+        setField(
+            "act_sections",
+            data.act_sections
+        );
+
+        setField(
+            "incident_date",
+            data.incident_date
+        );
+
+        setField(
+            "registration_date",
+            data.registration_date
+        );
+
+        setField(
+            "district",
+            data.district
+        );
+
+        setField(
+            "incident_location",
+            data.location
+        );
+
+        setField(
+            "person",
+            data.person
+        );
+
+        setField(
+            "phone",
+            data.phone
+        );
+
+        setField(
+            "vehicle",
+            data.vehicle
+        );
+
+        setField(
+            "description",
+            data.description
+        );
+
+
+        /* SUCCESS */
+
+        status.innerHTML = `
+            <div class="extract-success">
+
+                ✓ FIR details extracted successfully.
+
+                <br><br>
+
+                The extracted information has been
+                filled into the registration form.
+
+                <br><br>
+
+                Please review the information before
+                registering the FIR.
+
+            </div>
+        `;
+
+
+        /* PREVIEW */
+
+        createPreview(data);
+
+
+        /* SWITCH TO MANUAL FORM */
+
+        setTimeout(function() {
+
+            showTab(
+                "manualTab",
+                document.querySelectorAll(".tab")[0]
+            );
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }, 1200);
+
+
+    }
+
+    catch (error) {
+
+
+        console.error(
+            "FIR extraction error:",
+            error
+        );
+
+
+        status.innerHTML = `
+            <div class="extract-error">
+
+                ❌ ${escapeHtml(error.message)}
+
+            </div>
+        `;
+
+    }
+
+}
+
+
+/* ===================================================== */
+/* SET FORM FIELD */
+/* ===================================================== */
+
+function setField(name, value) {
+
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
+
+        return;
+
+    }
+
+
+    const field =
+        document.querySelector(
+            `[name="${name}"]`
+        );
+
+
+    if (!field) {
+
+        return;
+
+    }
+
+
+    field.value = value;
+
+
+    /*
+     * Trigger change event for select elements.
+     */
+
+    field.dispatchEvent(
+        new Event(
+            "change",
+            {
+                bubbles: true
+            }
+        )
+    );
+
+}
+
+
+/* ===================================================== */
+/* CREATE PREVIEW */
+/* ===================================================== */
+
+function createPreview(data) {
+
+
+    const preview =
+        document.getElementById(
+            "extractedPreview"
+        );
+
+    const grid =
+        document.getElementById(
+            "previewGrid"
+        );
+
+
+    const fields = [
+
+        ["FIR Number", data.fir_id],
+
+        ["Person", data.person],
+
+        ["Phone", data.phone],
+
+        ["Vehicle", data.vehicle],
+
+        ["Location", data.location],
+
+        ["Police Station", data.police_station],
+
+        ["Crime Category", data.crime_category],
+
+        ["Crime Major Head", data.crime_major_head],
+
+        ["Offence Gravity", data.offence_gravity],
+
+        ["Act Sections", data.act_sections],
+
+        ["District", data.district],
+
+        ["Incident Date", data.incident_date],
+
+        ["Registration Date", data.registration_date]
+
+    ];
+
+
+    grid.innerHTML = "";
+
+
+    fields.forEach(function(item) {
+
+
+        const label =
+            item[0];
+
+        const value =
+            item[1] || "Not detected";
+
+
+        grid.innerHTML += `
+
+            <div class="preview-item">
+
+                <div class="preview-label">
+                    ${escapeHtml(label)}
+                </div>
+
+                <div class="preview-value">
+                    ${escapeHtml(value)}
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    preview.style.display = "block";
+
+}
+
+
+/* ===================================================== */
+/* HTML ESCAPE */
+/* ===================================================== */
+
+function escapeHtml(value) {
+
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+</script>
+
 
 </body>
 

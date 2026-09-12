@@ -1044,116 +1044,173 @@ def extract_text_from_file(file_path):
 # ============================================================
 
 def extract_document_information(text):
-
     information = {
-
-        "fir_id": None,
-
-        "phone": None,
-
-        "vehicle": None,
-
-        "person": None,
-
-        "location": None
-
+        "fir_id": "",
+        "police_station": "",
+        "offence_gravity": "",
+        "crime_category": "",
+        "crime_major_head": "",
+        "act_sections": "",
+        "incident_date": "",
+        "registration_date": "",
+        "district": "",
+        "location": "",
+        "person": "",
+        "phone": "",
+        "vehicle": "",
+        "description": ""
     }
 
-
-    # ========================================================
-    # FIR
-    # ========================================================
-
+    # FIR ID
     fir_match = re.search(
-        r"\bFIR\s*(?:ID|NO|NUMBER)?\s*[:\-]?\s*(\d+)\b",
-        text,
-        re.IGNORECASE
+        r"\\bFIR\\s*(?:ID|NO|NUMBER)?\\s*[:\\-]?\\s*(\\d+)\\b",
+        text, re.IGNORECASE
     )
-
-
     if fir_match:
+        information["fir_id"] = ("FIR" + fir_match.group(1)).upper()
 
-        information["fir_id"] = (
-            "FIR"
-            +
-            fir_match.group(1)
-        ).upper()
-
-
-    # ========================================================
-    # PHONE
-    # ========================================================
-
-    phone_match = re.search(
-        r"\b[6-9]\d{9}\b",
-        text
+    # Person
+    person_match = re.search(
+        r"(?:Person|Name|Accused)\\s*:\\s*([A-Za-z .'-]+)",
+        text, re.IGNORECASE
     )
+    if person_match:
+        information["person"] = person_match.group(1).strip()
 
-
+    # Phone
+    phone_match = re.search(r"\\b[6-9]\\d{9}\\b", text)
     if phone_match:
+        information["phone"] = phone_match.group(0)
 
-        information["phone"] = (
-            phone_match.group(0)
-        )
-
-
-    # ========================================================
-    # VEHICLE
-    # ========================================================
-
+    # Vehicle
     vehicle_match = re.search(
-        r"\b[A-Z]{2}\d{1,2}[A-Z]{1,3}\d{1,4}\b",
+        r"\\b[A-Z]{2}\\d{1,2}[A-Z]{1,3}\\d{1,4}\\b",
         text.upper()
     )
-
-
     if vehicle_match:
+        information["vehicle"] = vehicle_match.group(0)
 
-        information["vehicle"] = (
-            vehicle_match.group(0)
-        )
+    def extract_labeled(pattern):
+        match = re.search(pattern, text, re.IGNORECASE | re.MULTILINE)
+        return match.group(1).strip() if match else ""
 
-
-    # ========================================================
-    # PERSON
-    # ========================================================
-
-    person_match = re.search(
-        r"(?:Person|Name|Accused)\s*:\s*([A-Za-z .'-]+)",
-        text,
-        re.IGNORECASE
+    information["location"] = extract_labeled(
+        r"^(?:Location|Place|Incident Location|Address)\\s*:\\s*(.+)$"
+    )
+    information["police_station"] = extract_labeled(
+        r"^Police Station\\s*:\\s*(.+)$"
+    )
+    information["crime_category"] = extract_labeled(
+        r"^Crime Category\\s*:\\s*(.+)$"
+    )
+    information["crime_major_head"] = extract_labeled(
+        r"^Crime Major Head\\s*:\\s*(.+)$"
+    )
+    information["offence_gravity"] = extract_labeled(
+        r"^Offence Gravity\\s*:\\s*(.+)$"
+    )
+    information["district"] = extract_labeled(
+        r"^District\\s*(?:/\\s*Jurisdiction)?\\s*:\\s*(.+)$"
     )
 
-
-    if person_match:
-
-        information["person"] = (
-            person_match.group(1)
-            .strip()
-        )
-
-
-    # ========================================================
-    # LOCATION
-    # ========================================================
-
-    location_match = re.search(
-        r"(?:Location|Place|Incident Location|Address)"
-        r"\s*:\s*([A-Za-z0-9 .,'/#-]+)",
-        text,
-        re.IGNORECASE
+    information["act_sections"] = extract_labeled(
+        r"^(?:Applicable IPC / Act Sections|Applicable Sections|Act Sections)\\s*:\\s*(.+)$"
     )
 
-
-    if location_match:
-
-        information["location"] = (
-            location_match.group(1)
-            .strip()
-        )
-
+    information["incident_date"] = extract_labeled(
+        r"^Incident Date\\s*:\\s*(.+)$"
+    )
+    information["registration_date"] = extract_labeled(
+        r"^Registration Date\\s*:\\s*(.+)$"
+    )
+    information["description"] = extract_labeled(
+        r"^(?:Case Description|Description)\\s*:\\s*(.+)$"
+    )
 
     return information
+
+
+# ============================================================
+# ADD FIR FILE EXTRACTION
+# ============================================================
+
+@app.route("/add-fir/extract", methods=["POST"])
+def add_fir_extract():
+    if not login_required():
+        return jsonify({
+            "success": False,
+            "error": "Unauthorized access."
+        }), 401
+
+    if "fir_file" not in request.files:
+        return jsonify({
+            "success": False,
+            "error": "No FIR file was uploaded."
+        }), 400
+
+    file = request.files["fir_file"]
+
+    if not file or file.filename == "":
+        return jsonify({
+            "success": False,
+            "error": "Please select a FIR file."
+        }), 400
+
+    filename = file.filename
+    extension = os.path.splitext(filename)[1].lower()
+
+    if extension not in [".pdf", ".txt"]:
+        return jsonify({
+            "success": False,
+            "error": "Only PDF and TXT files are supported."
+        }), 400
+
+    safe_filename = re.sub(
+        r"[^A-Za-z0-9_.-]",
+        "_",
+        filename
+    )
+
+    file_path = os.path.join(
+        UPLOAD_FOLDER,
+        safe_filename
+    )
+
+    try:
+        file.save(file_path)
+
+        text = extract_text_from_file(file_path)
+
+        if not text.strip():
+            return jsonify({
+                "success": False,
+                "error": (
+                    "No readable text was found in the FIR file. "
+                    "If this is a scanned PDF, OCR is required."
+                )
+            }), 400
+
+        information = extract_document_information(text)
+
+        return jsonify({
+            "success": True,
+            "data": information
+        })
+
+    except Exception as e:
+        print("FIR Extraction Error:", e)
+
+        return jsonify({
+            "success": False,
+            "error": "Unable to process the FIR file."
+        }), 500
+
+    finally:
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except OSError:
+                pass
 
 
 # ============================================================
@@ -1529,9 +1586,11 @@ def verify():
 
             if document_compare == database_compare:
 
-                matched_fields.append(
-                    field
-                )
+                matched_fields.append({
+                    "field": field,
+                    "document": document_value,
+                    "dataset": database_value
+                })
 
 
             # ------------------------------------------------
@@ -1546,7 +1605,8 @@ def verify():
 
                     "document": document_value,
 
-                    "database": database_value
+                    "database": database_value,
+                    "dataset": database_value
 
                 })
 
