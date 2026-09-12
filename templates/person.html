@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>
+        CRIMINAL ANAlYSIS- Person Network
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>
+        NEXGOV
+    </h1>
+
+    <p>
+        Criminal Network Analysis System
+    </p>
+
+</header>
+
+
+<div class="dashboard">
+
+
+{% if person %}
+
+
+    <h2>
+        Network Profile:
+        {{ person }}
+    </h2>
+
+
+    <!-- ==================================
+         NETWORK SCORE
+    =================================== -->
+
+    {% if score %}
+
+    <div class="score-card">
+
+        <h2>
+            Network Connectivity Score
+        </h2>
+
+
+        <div class="score-number">
+
+            {{ score.score }}
+
+            <span>
+                / 10
+            </span>
+
+        </div>
+
+
+        <h3>
+            {{ score.level }} Connectivity
+        </h3>
+
+
+        <p>
+            This score is based on the number of
+            connected FIRs, phones, vehicles and
+            locations in the available dataset.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+
+    <!-- ==================================
+         CONNECTION SUMMARY
+    =================================== -->
+
+    {% if score %}
+
+    <div class="info">
+
+        <h2>
+            Connection Summary
+        </h2>
+
+
+        <div class="summary-grid">
+
+
+            <div class="summary-item">
+
+                <h3>
+                    FIRs
+                </h3>
+
+                <p>
+                    {{ score.fir_count }}
+                </p>
+
+            </div>
+
+
+            <div class="summary-item">
+
+                <h3>
+                    Phones
+                </h3>
+
+                <p>
+                    {{ score.phone_count }}
+                </p>
+
+            </div>
+
+
+            <div class="summary-item">
+
+                <h3>
+                    Vehicles
+                </h3>
+
+                <p>
+                    {{ score.vehicle_count }}
+                </p>
+
+            </div>
+
+
+            <div class="summary-item">
+
+                <h3>
+                    Locations
+                </h3>
+
+                <p>
+                    {{ score.location_count }}
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+
+    <!-- ==================================
+         CONNECTED ENTITIES
+    =================================== -->
+
+    <div class="info">
+
+        <h2>
+            Connected Entities
+        </h2>
+
+
+        <p>
+
+            Direct relationships found for
+
+            <strong>
+                {{ person }}
+            </strong>.
+
+        </p>
+
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Entity
+                    </th>
+
+                    <th>
+                        Type
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+            {% for relationship in relationships %}
+
+                <tr>
+
+                    <td>
+                        {{ relationship.name }}
+                    </td>
+
+                    <td>
+                        {{ relationship.type }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+
+    <!-- ==================================
+         EXPLAINABLE INSIGHT
+    =================================== -->
+
+    <div class="info">
+
+        <h2>
+            Explainable Insight
+        </h2>
+
+
+        {% if score %}
+
+
+            {% if score.level == "High" %}
+
+                <p>
+
+                    ⚠ The network contains a high
+                    number of connections for this
+                    person in the available dataset.
+
+                </p>
+
+
+            {% elif score.level == "Moderate" %}
+
+                <p>
+
+                    ⚠ The network contains a
+                    moderate number of connections
+                    for this person.
+
+                </p>
+
+
+            {% else %}
+
+                <p>
+
+                    The network contains a relatively
+                    low number of connections.
+
+                </p>
+
+
+            {% endif %}
+
+
+            <p>
+
+                The result is based only on the
+                relationships present in the
+                prototype dataset.
+
+            </p>
+
+
+            <p>
+
+                <strong>
+                    This score is an investigative
+                    support indicator and does not
+                    determine guilt or innocence.
+                </strong>
+
+            </p>
+
+
+        {% endif %}
+
+    </div>
+
+
+
+{% else %}
+
+
+    <!-- ==================================
+         PERSON NOT FOUND
+    =================================== -->
+
+    <div class="info">
+
+        <h2>
+            Person Not Found
+        </h2>
+
+
+        <p>
+
+            The requested person was not found
+            in the dataset.
+
+        </p>
+
+    </div>
+
+
+{% endif %}
+
+
+
+<!-- ==================================
+     NAVIGATION
+=================================== -->
+
+<div class="navigation">
+
+    <a href="/network">
+
+        <button>
+            Back to Network
+        </button>
+
+    </a>
+
+
+    <a href="/cases">
+
+        <button>
+            View Cases
+        </button>
+
+    </a>
+
+
+    <a href="/dashboard">
+
+        <button>
+            Dashboard
+        </button>
+
+    </a>
+
+</div>
+
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Document Verification - Criminal Analysis</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7ff;
+            color: #172554;
+        }
+
+        .navbar {
+
+            height: 82px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #3730a3,
+                    #4f46e5,
+                    #7c3aed
+                );
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 0 38px;
+
+            justify-content: space-between;
+
+        }
+
+        .logo {
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+
+        }
+
+        .nav {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+        .nav a {
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 12px 16px;
+
+            border-radius: 10px;
+
+            font-weight: bold;
+
+            font-size: 14px;
+
+        }
+
+        .nav a:hover {
+
+            background: rgba(255,255,255,.15);
+
+        }
+
+        .nav a.active {
+
+            background: white;
+
+            color: #3730a3;
+
+        }
+
+        .logout {
+
+            background: #ef3028 !important;
+
+            color: white !important;
+
+        }
+
+        .container {
+
+            max-width: 1450px;
+
+            margin: auto;
+
+            padding: 38px;
+
+        }
+
+        .hero {
+
+            background:
+                linear-gradient(
+                    120deg,
+                    #ffffff,
+                    #eef2ff
+                );
+
+            padding: 38px;
+
+            border-left: 6px solid #6366f1;
+
+            border-radius: 20px;
+
+            margin-bottom: 28px;
+
+        }
+
+        .hero h1 {
+
+            margin: 0 0 12px;
+
+            font-size: 34px;
+
+        }
+
+        .hero p {
+
+            margin: 0;
+
+            color: #64748b;
+
+            font-size: 16px;
+
+        }
+
+        .card {
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 28px;
+
+            margin-bottom: 24px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(15,23,42,.06);
+
+            border: 1px solid #e2e8f0;
+
+        }
+
+        .card h2 {
+
+            margin-top: 0;
+
+            color: #1e3a8a;
+
+        }
+
+        .upload-area {
+
+            border: 2px dashed #a5b4fc;
+
+            border-radius: 15px;
+
+            padding: 30px;
+
+            background: #f8faff;
+
+            text-align: center;
+
+        }
+
+        input[type=file] {
+
+            display: block;
+
+            width: 100%;
+
+            padding: 18px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 10px;
+
+            background: white;
+
+            margin-bottom: 20px;
+
+        }
+
+        button {
+
+            border: none;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #4f46e5,
+                    #7c3aed
+                );
+
+            color: white;
+
+            padding: 14px 25px;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+        button:hover {
+
+            opacity: .9;
+
+        }
+
+        .success {
+
+            background: #dcfce7;
+
+            border-left: 6px solid #16a34a;
+
+            padding: 22px;
+
+            border-radius: 12px;
+
+            margin-bottom: 22px;
+
+            color: #166534;
+
+        }
+
+        .partial {
+
+            background: #fef3c7;
+
+            border-left: 6px solid #f59e0b;
+
+            padding: 22px;
+
+            border-radius: 12px;
+
+            margin-bottom: 22px;
+
+            color: #92400e;
+
+        }
+
+        .nomatch {
+
+            background: #fee2e2;
+
+            border-left: 6px solid #dc2626;
+
+            padding: 22px;
+
+            border-radius: 12px;
+
+            margin-bottom: 22px;
+
+            color: #991b1b;
+
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+        }
+
+        th {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #3730a3,
+                    #4f46e5
+                );
+
+            color: white;
+
+            text-align: left;
+
+            padding: 15px;
+
+        }
+
+        td {
+
+            padding: 15px;
+
+            border-bottom: 1px solid #e2e8f0;
+
+        }
+
+        .match {
+
+            color: #15803d;
+
+            font-weight: bold;
+
+        }
+
+        .conflict {
+
+            color: #dc2626;
+
+            font-weight: bold;
+
+        }
+
+        .missing {
+
+            color: #d97706;
+
+            font-weight: bold;
+
+        }
+
+        .info-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap: 15px;
+
+        }
+
+        .info {
+
+            background: #f8fafc;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+        }
+
+        .info small {
+
+            color: #64748b;
+
+            display: block;
+
+            margin-bottom: 5px;
+
+        }
+
+        .info strong {
+
+            color: #172554;
+
+            word-break: break-word;
+
+        }
+
+        .error {
+
+            background: #fee2e2;
+
+            border-left: 6px solid #dc2626;
+
+            padding: 20px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            color: #991b1b;
+
+        }
+
+        @media(max-width: 900px) {
+
+            .navbar {
+
+                height: auto;
+
+                padding: 20px;
+
+                flex-direction: column;
+
+                gap: 15px;
+
+            }
+
+            .nav {
+
+                flex-wrap: wrap;
+
+                justify-content: center;
+
+            }
+
+            .container {
+
+                padding: 18px;
+
+            }
+
+            .info-grid {
+
+                grid-template-columns: 1fr 1fr;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ===================================================== -->
+<!-- NAVBAR -->
+<!-- ===================================================== -->
+
+<div class="navbar">
+
+    <div class="logo">
+        Criminal Analysis
+    </div>
+
+    <div class="nav">
+
+        <a href="/dashboard">
+            Dashboard
+        </a>
+
+        <a href="/cases">
+            Cases
+        </a>
+
+        <a href="/network">
+            Network Analysis
+        </a>
+
+        <a href="/patterns">
+            Crime Patterns
+        </a>
+
+        <a href="/connections">
+            Case Connections
+        </a>
+
+        <a href="/verify" class="active">
+            Document Verification
+        </a>
+
+        <a href="/ai-agent">
+            AI Agent
+        </a>
+
+        <a href="/logout" class="logout">
+            🚪 Logout
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- ===================================================== -->
+<!-- CONTENT -->
+<!-- ===================================================== -->
+
+<div class="container">
+
+
+    <div class="hero">
+
+        <h1>
+            📄 Document Verification
+        </h1>
+
+        <p>
+            Upload an FIR document and compare
+            its information with the available
+            FIR dataset.
+        </p>
+
+    </div>
+
+
+    {% if error %}
+
+    <div class="error">
+
+        <strong>
+            ⚠ Verification Error
+        </strong>
+
+        <p>
+            {{ error }}
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- ================================================= -->
+    <!-- UPLOAD -->
+    <!-- ================================================= -->
+
+    <div class="card">
+
+        <h2>
+            📤 Upload FIR Document
+        </h2>
+
+        <p>
+            Supported file formats:
+            <strong>PDF and TXT</strong>
+        </p>
+
+
+        <form
+            action="/verify"
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <div class="upload-area">
+
+                <input
+                    type="file"
+                    name="document"
+                    accept=".pdf,.txt"
+                    required
+                >
+
+                <button type="submit">
+                    🔍 Verify Document
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    {% if result %}
+
+
+    <!-- ================================================= -->
+    <!-- STATUS -->
+    <!-- ================================================= -->
+
+    {% if result.status == "MATCH" %}
+
+    <div class="success">
+
+        <h2>
+            ✓ MATCH
+        </h2>
+
+        <p>
+            The uploaded document matches
+            the available FIR record.
+        </p>
+
+    </div>
+
+    {% elif result.status == "PARTIAL" %}
+
+    <div class="partial">
+
+        <h2>
+            ⚠ PARTIAL MATCH
+        </h2>
+
+        <p>
+            Some information matches,
+            but differences were detected.
+        </p>
+
+    </div>
+
+    {% else %}
+
+    <div class="nomatch">
+
+        <h2>
+            ✕ NO MATCH
+        </h2>
+
+        <p>
+            No matching FIR record was found.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- ================================================= -->
+    <!-- FILE -->
+    <!-- ================================================= -->
+
+    <div class="card">
+
+        <h2>
+            📄 Uploaded Document
+        </h2>
+
+        <p>
+
+            File:
+
+            <strong>
+                {{ result.filename }}
+            </strong>
+
+        </p>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- EXTRACTED INFORMATION -->
+    <!-- ================================================= -->
+
+    <div class="card">
+
+        <h2>
+            🔎 Extracted Document Information
+        </h2>
+
+
+        <div class="info-grid">
+
+
+            <div class="info">
+
+                <small>
+                    FIR ID
+                </small>
+
+                <strong>
+                    {{ document_info.fir_id or "Not found" }}
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <small>
+                    Person
+                </small>
+
+                <strong>
+                    {{ document_info.person or "Not found" }}
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <small>
+                    Phone
+                </small>
+
+                <strong>
+                    {{ document_info.phone or "Not found" }}
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <small>
+                    Vehicle
+                </small>
+
+                <strong>
+                    {{ document_info.vehicle or "Not found" }}
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <small>
+                    Location
+                </small>
+
+                <strong>
+                    {{ document_info.location or "Not found" }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- MATCHING INFORMATION -->
+    <!-- ================================================= -->
+
+    <div class="card">
+
+        <h2>
+            ✓ Matching Information
+        </h2>
+
+
+        {% if matched_case %}
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Field
+                    </th>
+
+                    <th>
+                        Document
+                    </th>
+
+                    <th>
+                        Dataset
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+                {% for field in [
+                    "fir_id",
+                    "person",
+                    "phone",
+                    "vehicle",
+                    "location"
+                ] %}
+
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            {{ field|replace("_", " ")|title }}
+                        </strong>
+                    </td>
+
+
+                    <td>
+
+                        {% if document_info[field] %}
+
+                            {{ document_info[field] }}
+
+                        {% else %}
+
+                            <span class="missing">
+                                Not extracted
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ matched_case[field] }}
+
+                    </td>
+
+
+                    <td>
+
+                        {% if field in result.matches %}
+
+                            <span class="match">
+                                ✓ MATCH
+                            </span>
+
+                        {% elif field in result.missing %}
+
+                            <span class="missing">
+                                ⚠ MISSING
+                            </span>
+
+                        {% else %}
+
+                            <span class="conflict">
+                                ✕ CONFLICT
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+
+                {% endfor %}
+
+
+            </tbody>
+
+        </table>
+
+
+        {% else %}
+
+        <p>
+            No matching dataset record was found.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- CONFLICTS -->
+    <!-- ================================================= -->
+
+    {% if result.conflicts %}
+
+    <div class="card">
+
+        <h2>
+            ⚠ Conflicts Detected
+        </h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Field
+                    </th>
+
+                    <th>
+                        Document
+                    </th>
+
+                    <th>
+                        Dataset
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for conflict in result.conflicts %}
+
+                <tr>
+
+                    <td>
+                        {{ conflict.field|replace("_", " ")|title }}
+                    </td>
+
+                    <td class="conflict">
+                        {{ conflict.document }}
+                    </td>
+
+                    <td>
+                        {{ conflict.database }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- ================================================= -->
+    <!-- MISSING -->
+    <!-- ================================================= -->
+
+    {% if result.missing %}
+
+    <div class="card">
+
+        <h2>
+            ⚠ Missing Information
+        </h2>
+
+        <p>
+
+            The following fields could not
+            be extracted from the uploaded document:
+
+        </p>
+
+        <ul>
+
+            {% for field in result.missing %}
+
+            <li class="missing">
+
+                {{ field|replace("_", " ")|title }}
+
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- ================================================= -->
+    <!-- EXPLANATION -->
+    <!-- ================================================= -->
+
+    <div class="card">
+
+        <h2>
+            🧠 Verification Explanation
+        </h2>
+
+        <p>
+            {{ result.explanation }}
+        </p>
+
+    </div>
+
+
+    {% endif %}
+
+
+</div>
+
+</body>
+
+</html>

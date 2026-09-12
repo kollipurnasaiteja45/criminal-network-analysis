@@ -1,0 +1,10 @@
+FIR001
+
+Person: Ravi Kumar
+Phone: 9876543210
+Vehicle: KA01AB1234
+Location: 100 Feet Road Indiranagar Bengaluru
+
+Crime Category: Property Crime
+Crime Major Head: Robbery / Dacoity
+Police Station: Central Police Station

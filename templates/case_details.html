@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Case Investigation - NEXGOV</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="header">
+
+<div class="logo">
+    Criminal Analysis
+</div>
+
+
+        <nav>
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/cases">
+                Cases
+            </a>
+
+            <a href="/network">
+                Network Analysis
+            </a>
+
+            <a href="/patterns">
+                Crime Patterns
+            </a>
+
+            <a href="/connections">
+                Case Connections
+            </a>
+
+            <a href="/verify">
+                Document Verification
+            </a>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="container">
+
+
+        {% if case %}
+
+
+        <!-- =================================================
+             CASE HEADER
+        ================================================== -->
+
+        <section class="welcome">
+
+            <h1>
+                Case Investigation
+            </h1>
+
+            <p>
+                Detailed information for FIR
+                <strong>{{ case.fir_id }}</strong>
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             FIR INFORMATION
+        ================================================== -->
+
+        <section class="pattern-section">
+
+            <h2>
+                📄 FIR Information
+            </h2>
+
+
+            <div class="summary-grid">
+
+
+                <div class="summary-item">
+
+                    <h3>
+                        FIR ID
+                    </h3>
+
+                    <p>
+                        {{ case.fir_id }}
+                    </p>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <h3>
+                        Person
+                    </h3>
+
+                    <p>
+                        {{ case.person }}
+                    </p>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <h3>
+                        Phone
+                    </h3>
+
+                    <p>
+                        {{ case.phone }}
+                    </p>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <h3>
+                        Vehicle
+                    </h3>
+
+                    <p>
+                        {{ case.vehicle }}
+                    </p>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <h3>
+                        Location
+                    </h3>
+
+                    <p>
+                        {{ case.location }}
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PERSON NETWORK
+        ================================================== -->
+
+        <section class="pattern-section">
+
+            <h2>
+                👤 Person Investigation
+            </h2>
+
+            <p>
+                Investigate the network associated with this
+                person.
+            </p>
+
+
+            <a href="/person/{{ case.person }}">
+
+                <button>
+                    View Person Network
+                </button>
+
+            </a>
+
+        </section>
+
+
+
+        <!-- =================================================
+             RELATED ENTITIES
+        ================================================== -->
+
+        <section class="pattern-section">
+
+            <h2>
+                🔗 Related Entities
+            </h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Entity Type
+                        </th>
+
+                        <th>
+                            Value
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <tr>
+
+                        <td>
+                            👤 Person
+                        </td>
+
+                        <td>
+                            {{ case.person }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            📞 Phone
+                        </td>
+
+                        <td>
+                            {{ case.phone }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            🚗 Vehicle
+                        </td>
+
+                        <td>
+                            {{ case.vehicle }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            📍 Location
+                        </td>
+
+                        <td>
+                            {{ case.location }}
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+
+        <!-- =================================================
+             INVESTIGATION TOOLS
+        ================================================== -->
+
+        <section class="pattern-section">
+
+            <h2>
+                🕵 Investigation Tools
+            </h2>
+
+
+            <div class="stats-grid">
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        🔗
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Network Analysis
+                        </h3>
+
+                        <a href="/network">
+                            Open Network
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        📊
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Crime Patterns
+                        </h3>
+
+                        <a href="/patterns">
+                            Analyze Patterns
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        🔎
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Case Connections
+                        </h3>
+
+                        <a href="/connections">
+                            View Connections
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        📄
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Document Verification
+                        </h3>
+
+                        <a href="/verify">
+                            Verify Document
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             INVESTIGATION NOTICE
+        ================================================== -->
+
+        <section class="case-info">
+
+            <h3>
+                ⚠ Investigation Notice
+            </h3>
+
+            <p>
+                The information shown on this page is based
+                on the available FIR dataset.
+            </p>
+
+            <p>
+                Network relationships and repeated entities
+                are provided as investigation support indicators.
+            </p>
+
+            <p>
+                These results do not establish guilt or innocence.
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             NAVIGATION
+        ================================================== -->
+
+        <div class="back-section">
+
+            <a href="/cases">
+                ← Case Management
+            </a>
+
+            &nbsp;&nbsp;
+
+            <a href="/connections">
+                Case Connections
+            </a>
+
+            &nbsp;&nbsp;
+
+            <a href="/network">
+                Network Analysis
+            </a>
+
+            &nbsp;&nbsp;
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- =================================================
+             CASE NOT FOUND
+        ================================================== -->
+
+        <section class="case-info">
+
+            <h2>
+                ❌ Case Not Found
+            </h2>
+
+            <p>
+                The requested FIR could not be found in the
+                available dataset.
+            </p>
+
+            <a href="/cases">
+                ← Return to Cases
+            </a>
+
+        </section>
+
+
+        {% endif %}
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            NEXGOV | Criminal Network Analysis System
+        </p>
+
+        <p>
+            Investigation Support Prototype
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

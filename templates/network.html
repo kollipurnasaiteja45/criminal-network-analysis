@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Network Analysis</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Cytoscape.js -->
+    <script src="https://unpkg.com/cytoscape@3.29.2/dist/cytoscape.min.js"></script>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="header">
+
+        <div class="logo">
+    Criminal Analysis
+</div>
+
+
+        <nav>
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/cases">
+                Cases
+            </a>
+
+            <a href="/network" class="active">
+                Network Analysis
+            </a>
+
+            <a href="/patterns">
+                Crime Patterns
+            </a>
+
+            <a href="/connections">
+                Case Connections
+            </a>
+
+            <a href="/verify">
+                Document Verification
+            </a>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="container">
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <section class="welcome">
+
+            <h1>
+                Criminal Network Analysis
+            </h1>
+
+            <p>
+                Explore relationships between persons,
+                FIRs, phone numbers, vehicles and locations.
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             NETWORK SEARCH
+        ================================================== -->
+
+        <section class="pattern-section">
+
+            <h2>
+                🔍 Search Network
+            </h2>
+
+            <p>
+                Search for a person, FIR, phone number,
+                vehicle or location.
+            </p>
+
+
+            <div class="network-search">
+
+                <input
+                    type="text"
+                    id="networkSearch"
+                    placeholder="Enter person, FIR, phone, vehicle or location"
+                >
+
+
+                <button
+                    onclick="searchNetwork()">
+
+                    Search
+
+                </button>
+
+
+                <button
+                    onclick="clearNetworkSearch()">
+
+                    Clear
+
+                </button>
+
+            </div>
+
+
+            <div id="searchResult"
+                 class="search-result">
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             NETWORK GRAPH
+        ================================================== -->
+
+        <section class="pattern-section">
+
+            <h2>
+                🕸️ Relationship Network
+            </h2>
+
+            <p>
+                Click any node to inspect its relationships.
+            </p>
+
+
+            <div id="networkGraph"></div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             NODE INFORMATION
+        ================================================== -->
+
+        <section class="pattern-section">
+
+            <h2>
+                🔎 Selected Entity
+            </h2>
+
+
+            <div id="nodeInformation">
+
+                <p>
+                    Click a node in the network to view
+                    information.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             NETWORK INSIGHTS
+        ================================================== -->
+
+        <section class="pattern-section">
+
+            <h2>
+                🧠 Network Insights
+            </h2>
+
+            <p>
+                Entities with more relationships may be useful
+                for further investigation.
+            </p>
+
+
+            {% if insights %}
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Person
+                            </th>
+
+                            <th>
+                                Connections
+                            </th>
+
+                            <th>
+                                Investigation
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in insights %}
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+                                    {{ item.person }}
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+
+                                {{ item.connections }}
+
+                            </td>
+
+
+                            <td>
+
+                                <a href="/person/{{ item.person }}">
+                                    View Person Network
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+            <div class="no-pattern">
+
+                No network insights available.
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+
+        <!-- =================================================
+             NETWORK LEGEND
+        ================================================== -->
+
+        <section class="pattern-section">
+
+            <h2>
+                📌 Network Legend
+            </h2>
+
+
+            <div class="summary-grid">
+
+
+                <div class="summary-item">
+
+                    <h3>
+                        👤 Person
+                    </h3>
+
+                    <p>
+                        Individual appearing in the dataset.
+                    </p>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <h3>
+                        📄 FIR
+                    </h3>
+
+                    <p>
+                        First Information Report record.
+                    </p>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <h3>
+                        📞 Phone
+                    </h3>
+
+                    <p>
+                        Phone number associated with a record.
+                    </p>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <h3>
+                        🚗 Vehicle
+                    </h3>
+
+                    <p>
+                        Vehicle associated with a record.
+                    </p>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <h3>
+                        📍 Location
+                    </h3>
+
+                    <p>
+                        Location associated with a record.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             INVESTIGATION NOTICE
+        ================================================== -->
+
+        <section class="case-info">
+
+            <h3>
+                ⚠ Investigation Notice
+            </h3>
+
+            <p>
+                Network relationships are generated from
+                the available dataset.
+            </p>
+
+            <p>
+                A shared entity represents a potential
+                relationship for investigation purposes.
+            </p>
+
+            <p>
+                Network analysis does not establish guilt
+                or innocence.
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             NAVIGATION
+        ================================================== -->
+
+        <div class="back-section">
+
+            <a href="/dashboard">
+                ← Dashboard
+            </a>
+
+            &nbsp;&nbsp;
+
+            <a href="/cases">
+                Case Management
+            </a>
+
+            &nbsp;&nbsp;
+
+            <a href="/patterns">
+                Crime Patterns
+            </a>
+
+            &nbsp;&nbsp;
+
+            <a href="/connections">
+                Case Connections
+            </a>
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            CRIMINAL ANAlYSIS | Criminal Network Analysis System
+        </p>
+
+        <p>
+            Investigation Support Prototype
+        </p>
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         GRAPH DATA
+    ====================================================== -->
+
+    <script id="graph-data"
+            type="application/json">
+
+        {{ graph_data | tojson }}
+
+    </script>
+
+
+
+    <!-- =====================================================
+         NETWORK JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        // =================================================
+        // GET GRAPH DATA
+        // =================================================
+
+        const graphDataElement =
+            document.getElementById("graph-data");
+
+
+        const graphData =
+            JSON.parse(
+                graphDataElement.textContent
+            );
+
+
+        const elements = [];
+
+
+
+        // =================================================
+        // ADD NODES
+        // =================================================
+
+        graphData.nodes.forEach(function(node) {
+
+            elements.push({
+
+                data: {
+
+                    id: node.id,
+
+                    label: node.label,
+
+                    type: node.type
+
+                }
+
+            });
+
+        });
+
+
+
+        // =================================================
+        // ADD EDGES
+        // =================================================
+
+        graphData.edges.forEach(function(edge) {
+
+            elements.push({
+
+                data: {
+
+                    source: edge.source,
+
+                    target: edge.target
+
+                }
+
+            });
+
+        });
+
+
+
+        // =================================================
+        // CREATE NETWORK
+        // =================================================
+
+        const cy = cytoscape({
+
+            container:
+                document.getElementById(
+                    "networkGraph"
+                ),
+
+
+            elements: elements,
+
+
+            style: [
+
+                // -----------------------------------------
+                // DEFAULT NODE
+                // -----------------------------------------
+
+                {
+
+                    selector: "node",
+
+                    style: {
+
+                        "label":
+                            "data(label)",
+
+                        "text-valign":
+                            "center",
+
+                        "text-halign":
+                            "center",
+
+                        "font-size":
+                            "11px",
+
+                        "background-color":
+                            "#4f46e5",
+
+                        "color":
+                            "#222",
+
+                        "text-outline-width":
+                            2,
+
+                        "text-outline-color":
+                            "#ffffff",
+
+                        "width":
+                            45,
+
+                        "height":
+                            45
+
+                    }
+
+                },
+
+
+                // -----------------------------------------
+                // PERSON
+                // -----------------------------------------
+
+                {
+
+                    selector:
+                        'node[type="Person"]',
+
+                    style: {
+
+                        "background-color":
+                            "#2563eb",
+
+                        "shape":
+                            "ellipse"
+
+                    }
+
+                },
+
+
+                // -----------------------------------------
+                // FIR
+                // -----------------------------------------
+
+                {
+
+                    selector:
+                        'node[type="FIR"]',
+
+                    style: {
+
+                        "background-color":
+                            "#dc2626",
+
+                        "shape":
+                            "rectangle"
+
+                    }
+
+                },
+
+
+                // -----------------------------------------
+                // PHONE
+                // -----------------------------------------
+
+                {
+
+                    selector:
+                        'node[type="Phone"]',
+
+                    style: {
+
+                        "background-color":
+                            "#16a34a",
+
+                        "shape":
+                            "diamond"
+
+                    }
+
+                },
+
+
+                // -----------------------------------------
+                // VEHICLE
+                // -----------------------------------------
+
+                {
+
+                    selector:
+                        'node[type="Vehicle"]',
+
+                    style: {
+
+                        "background-color":
+                            "#ea580c",
+
+                        "shape":
+                            "hexagon"
+
+                    }
+
+                },
+
+
+                // -----------------------------------------
+                // LOCATION
+                // -----------------------------------------
+
+                {
+
+                    selector:
+                        'node[type="Location"]',
+
+                    style: {
+
+                        "background-color":
+                            "#9333ea",
+
+                        "shape":
+                            "round-rectangle"
+
+                    }
+
+                },
+
+
+                // -----------------------------------------
+                // EDGES
+                // -----------------------------------------
+
+                {
+
+                    selector:
+                        "edge",
+
+                    style: {
+
+                        "width":
+                            2,
+
+                        "line-color":
+                            "#999",
+
+                        "curve-style":
+                            "bezier",
+
+                        "target-arrow-shape":
+                            "none"
+
+                    }
+
+                },
+
+
+                // -----------------------------------------
+                // SELECTED NODE
+                // -----------------------------------------
+
+                {
+
+                    selector:
+                        ":selected",
+
+                    style: {
+
+                        "border-width":
+                            4,
+
+                        "border-color":
+                            "#111"
+
+                    }
+
+                }
+
+            ],
+
+
+            // =================================================
+            // GRAPH LAYOUT
+            // =================================================
+
+            layout: {
+
+                name:
+                    "cose",
+
+                animate:
+                    true,
+
+                fit:
+                    true,
+
+                padding:
+                    50
+
+            }
+
+        });
+
+
+
+        // =================================================
+        // NODE CLICK
+        // =================================================
+
+        cy.on(
+            "tap",
+            "node",
+            function(event) {
+
+
+                const node =
+                    event.target;
+
+
+                const nodeId =
+                    node.data("id");
+
+
+                const nodeType =
+                    node.data("type");
+
+
+                const connectedNodes =
+                    node.neighborhood(
+                        "node"
+                    );
+
+
+                let html = "";
+
+
+                // -----------------------------------------
+                // NODE NAME
+                // -----------------------------------------
+
+                html +=
+                    "<h3>" +
+                    nodeId +
+                    "</h3>";
+
+
+                // -----------------------------------------
+                // TYPE
+                // -----------------------------------------
+
+                html +=
+                    "<p>" +
+                    "<strong>Type:</strong> " +
+                    nodeType +
+                    "</p>";
+
+
+                // -----------------------------------------
+                // CONNECTION COUNT
+                // -----------------------------------------
+
+                html +=
+                    "<p>" +
+                    "<strong>Connections:</strong> " +
+                    connectedNodes.length +
+                    "</p>";
+
+
+                // -----------------------------------------
+                // PERSON LINK
+                // -----------------------------------------
+
+                if (
+    nodeType === "Person"
+) {
+
+    html +=
+
+        '<p>' +
+
+        '<a href="/person/' +
+
+        encodeURIComponent(
+            nodeId
+        ) +
+
+        '">' +
+
+        'View Person Network' +
+
+        '</a>' +
+
+        '</p>';
+
+    html +=
+
+        '<p>' +
+
+        '<button class="ai-analyze-button" ' +
+        'onclick="analyzePersonWithAI(\'' +
+        encodeURIComponent(nodeId) +
+        '\')">' +
+
+        '🧠 AI Analyze Person' +
+
+        '</button>' +
+
+        '</p>';
+}
+
+
+                // -----------------------------------------
+                // FIR LINK
+                // -----------------------------------------
+
+                if (
+                    nodeType === "FIR"
+                ) {
+
+                    html +=
+
+                        '<p>' +
+
+                        '<a href="/case/' +
+
+                        encodeURIComponent(
+                            nodeId
+                        ) +
+
+                        '">' +
+
+                        'View Case Details' +
+
+                        '</a>' +
+
+                        '</p>';
+
+                }
+
+
+                // -----------------------------------------
+                // CONNECTED ENTITIES
+                // -----------------------------------------
+
+                html +=
+                    "<h4>" +
+                    "Connected Entities" +
+                    "</h4>";
+
+
+                if (
+                    connectedNodes.length === 0
+                ) {
+
+                    html +=
+                        "<p>" +
+                        "No connected entities." +
+                        "</p>";
+
+                }
+
+                else {
+
+                    html +=
+                        "<ul>";
+
+
+                    connectedNodes.forEach(
+                        function(connectedNode) {
+
+                            html +=
+
+                                "<li>" +
+
+                                connectedNode.data(
+                                    "label"
+                                ) +
+
+                                " (" +
+
+                                connectedNode.data(
+                                    "type"
+                                ) +
+
+                                ")" +
+
+                                "</li>";
+
+                        }
+                    );
+
+
+                    html +=
+                        "</ul>";
+
+                }
+
+
+                document.getElementById(
+                    "nodeInformation"
+                ).innerHTML = html;
+
+            }
+        );
+
+
+
+        // =================================================
+        // SEARCH NETWORK
+        // =================================================
+
+        function searchNetwork() {
+
+
+            const searchInput =
+                document.getElementById(
+                    "networkSearch"
+                );
+
+
+            const searchValue =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
+
+
+            const result =
+                document.getElementById(
+                    "searchResult"
+                );
+
+
+            // -----------------------------------------
+            // EMPTY SEARCH
+            // -----------------------------------------
+
+            if (
+                searchValue === ""
+            ) {
+
+                result.innerHTML =
+                    "<p>" +
+                    "Please enter something to search." +
+                    "</p>";
+
+                return;
+
+            }
+
+
+            let foundNode = null;
+
+
+            // -----------------------------------------
+            // SEARCH ALL NODES
+            // -----------------------------------------
+
+            cy.nodes().forEach(
+                function(node) {
+
+
+                    const nodeId =
+                        String(
+                            node.data("id")
+                        ).toLowerCase();
+
+
+                    const nodeLabel =
+                        String(
+                            node.data("label")
+                        ).toLowerCase();
+
+
+                    if (
+                        nodeId.includes(
+                            searchValue
+                        )
+                        ||
+                        nodeLabel.includes(
+                            searchValue
+                        )
+                    ) {
+
+                        if (
+                            foundNode === null
+                        ) {
+
+                            foundNode =
+                                node;
+
+                        }
+
+                    }
+
+                }
+            );
+
+
+            // -----------------------------------------
+            // NOT FOUND
+            // -----------------------------------------
+
+            if (
+                foundNode === null
+            ) {
+
+                result.innerHTML =
+                    "<p>" +
+                    "❌ No matching entity found." +
+                    "</p>";
+
+                return;
+
+            }
+
+
+            // -----------------------------------------
+            // SELECT NODE
+            // -----------------------------------------
+
+            cy.elements().unselect();
+
+            foundNode.select();
+
+
+            // -----------------------------------------
+            // MOVE TO NODE
+            // -----------------------------------------
+
+            cy.animate({
+
+                center: {
+
+                    eles:
+                        foundNode
+
+                },
+
+                zoom:
+                    2
+
+            }, {
+
+                duration:
+                    600
+
+            });
+
+
+            // -----------------------------------------
+            // GET NODE INFORMATION
+            // -----------------------------------------
+
+            const nodeId =
+                foundNode.data("id");
+
+
+            const nodeType =
+                foundNode.data("type");
+
+
+            const connectedNodes =
+                foundNode.neighborhood(
+                    "node"
+                );
+
+
+            let html = "";
+
+
+            html +=
+                "<h3>" +
+                "✓ Entity Found" +
+                "</h3>";
+
+
+            html +=
+                "<p>" +
+
+                "<strong>Name:</strong> " +
+
+                nodeId +
+
+                "</p>";
+
+
+            html +=
+                "<p>" +
+
+                "<strong>Type:</strong> " +
+
+                nodeType +
+
+                "</p>";
+
+
+            html +=
+                "<p>" +
+
+                "<strong>Connections:</strong> " +
+
+                connectedNodes.length +
+
+                "</p>";
+
+
+            // -----------------------------------------
+            // PERSON BUTTON
+            // -----------------------------------------
+
+            if (
+                nodeType === "Person"
+            ) {
+
+                html +=
+
+                    '<a href="/person/' +
+
+                    encodeURIComponent(
+                        nodeId
+                    ) +
+
+                    '">' +
+
+                    'View Person Network' +
+
+                    '</a>';
+
+            }
+
+
+            // -----------------------------------------
+            // FIR BUTTON
+            // -----------------------------------------
+
+            if (
+                nodeType === "FIR"
+            ) {
+
+                html +=
+
+                    '<a href="/case/' +
+
+                    encodeURIComponent(
+                        nodeId
+                    ) +
+
+                    '">' +
+
+                    'View Case Details' +
+
+                    '</a>';
+
+            }
+
+
+            result.innerHTML =
+                html;
+
+
+            // -----------------------------------------
+            // SHOW SAME INFORMATION BELOW
+            // -----------------------------------------
+
+            document.getElementById(
+                "nodeInformation"
+            ).innerHTML =
+                html;
+
+        }
+
+
+
+        // =================================================
+        // CLEAR SEARCH
+        // =================================================
+
+        function clearNetworkSearch() {
+
+
+            document.getElementById(
+                "networkSearch"
+            ).value = "";
+
+
+            document.getElementById(
+                "searchResult"
+            ).innerHTML = "";
+
+
+            document.getElementById(
+                "nodeInformation"
+            ).innerHTML =
+
+                "<p>" +
+
+                "Click a node in the network " +
+                "to view information." +
+
+                "</p>";
+
+
+            cy.elements().unselect();
+
+
+            cy.fit(
+                cy.elements(),
+                50
+            );
+
+        }
+
+
+
+        // =================================================
+        // ENTER KEY SEARCH
+        // =================================================
+
+        document.getElementById(
+            "networkSearch"
+        ).addEventListener(
+            "keypress",
+            function(event) {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    searchNetwork();
+
+                }
+
+            }
+        );
+        // =================================================
+// AI PERSON ANALYSIS
+// =================================================
+
+function analyzePersonWithAI(encodedPerson) {
+
+    const person = decodeURIComponent(encodedPerson);
+
+    const information =
+        document.getElementById("nodeInformation");
+
+    information.innerHTML =
+        "<h3>🧠 AI Investigation Analysis</h3>" +
+        "<p>Analyzing <strong>" +
+        person +
+        "</strong>...</p>";
+
+    fetch("/ai-agent/ask", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            question: "Find everything about " + person
+        })
+
+    })
+
+    .then(function(response) {
+
+        if (!response.ok) {
+            throw new Error("AI analysis failed");
+        }
+
+        return response.json();
+
+    })
+
+    .then(function(data) {
+
+        const answer =
+            data.answer || "No analysis available.";
+
+        information.innerHTML =
+
+            "<h3>🧠 AI Investigation Analysis</h3>" +
+
+            "<div class='ai-result'>" +
+
+            "<pre>" +
+            escapeHTML(answer) +
+            "</pre>" +
+
+            "</div>";
+
+    })
+
+    .catch(function(error) {
+
+        console.error(error);
+
+        information.innerHTML =
+
+            "<h3>⚠ AI Analysis Error</h3>" +
+
+            "<p>" +
+            "Unable to analyze this person. " +
+            "Please try again." +
+            "</p>";
+
+    });
+}
+
+
+// =================================================
+// PROTECT AI OUTPUT FROM HTML
+// =================================================
+
+function escapeHTML(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+}
+
+    </script>
+
+
+</body>
+
+</html>

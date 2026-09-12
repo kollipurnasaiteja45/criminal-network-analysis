@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Investigation Agent - Criminal Analysis</title>
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fc;
+            color: #172033;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+            height: 82px;
+            background: linear-gradient(
+                135deg,
+                #30308f,
+                #5b35e8
+            );
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 38px;
+
+            color: white;
+
+            box-shadow:
+                0 4px 18px rgba(48, 48, 143, 0.25);
+
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+
+        .brand {
+            font-size: 29px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: white;
+        }
+
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+
+        .nav-links a {
+            color: white;
+            padding: 13px 15px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.25s;
+        }
+
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+
+        .nav-links a.active {
+            background: white;
+            color: #4936d9;
+        }
+
+
+        .logout {
+            background: #ef3b32 !important;
+            color: white !important;
+            margin-left: 7px;
+        }
+
+
+        .logout:hover {
+            background: #d92b25 !important;
+        }
+
+
+        /* =====================================================
+           MAIN CONTAINER
+        ===================================================== */
+
+        .container {
+            width: min(1250px, 94%);
+            margin: 35px auto 60px;
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+            background:
+                linear-gradient(
+                    135deg,
+                    #182b68,
+                    #2e478e
+                );
+
+            color: white;
+
+            border-radius: 20px;
+
+            padding: 34px 38px;
+
+            position: relative;
+            overflow: hidden;
+
+            box-shadow:
+                0 12px 35px rgba(30, 55, 120, 0.18);
+        }
+
+
+        .hero::after {
+            content: "";
+            position: absolute;
+
+            width: 230px;
+            height: 230px;
+
+            right: -70px;
+            top: -90px;
+
+            border-radius: 50%;
+
+            background: rgba(255,255,255,0.08);
+        }
+
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+
+        .hero-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            font-size: 31px;
+            font-weight: 800;
+
+            margin-bottom: 12px;
+        }
+
+
+        .robot-icon {
+            width: 50px;
+            height: 50px;
+
+            background: rgba(255,255,255,0.13);
+
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 28px;
+        }
+
+
+        .hero-description {
+            font-size: 16px;
+            line-height: 1.7;
+
+            color: #e8edff;
+
+            max-width: 850px;
+        }
+
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            margin-top: 20px;
+
+            padding: 10px 17px;
+
+            border-radius: 30px;
+
+            background: rgba(255,255,255,0.13);
+
+            color: white;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+
+        .status-dot {
+            width: 9px;
+            height: 9px;
+
+            border-radius: 50%;
+
+            background: #4ade80;
+
+            box-shadow:
+                0 0 10px rgba(74,222,128,0.8);
+        }
+
+
+        /* =====================================================
+           AI WORKSPACE
+        ===================================================== */
+
+        .workspace {
+            margin-top: 25px;
+
+            display: grid;
+
+            grid-template-columns:
+                280px 1fr;
+
+            gap: 22px;
+        }
+
+
+        /* =====================================================
+           SIDE PANEL
+        ===================================================== */
+
+        .side-panel {
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 22px;
+
+            border: 1px solid #e3e8f2;
+
+            box-shadow:
+                0 8px 25px rgba(30,45,80,0.07);
+
+            height: fit-content;
+        }
+
+
+        .side-title {
+            font-size: 17px;
+            font-weight: 800;
+
+            color: #263b82;
+
+            margin-bottom: 18px;
+        }
+
+
+        .capability {
+            display: flex;
+            align-items: flex-start;
+
+            gap: 12px;
+
+            padding: 13px 10px;
+
+            border-radius: 11px;
+
+            margin-bottom: 8px;
+
+            transition: 0.2s;
+        }
+
+
+        .capability:hover {
+            background: #f3f5ff;
+        }
+
+
+        .capability-icon {
+            width: 34px;
+            height: 34px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background: #eef0ff;
+
+            font-size: 17px;
+        }
+
+
+        .capability-text strong {
+            display: block;
+
+            font-size: 13px;
+
+            color: #1f2e59;
+
+            margin-bottom: 3px;
+        }
+
+
+        .capability-text span {
+            font-size: 11px;
+
+            color: #7b8498;
+
+            line-height: 1.4;
+        }
+
+
+        /* =====================================================
+           CHAT PANEL
+        ===================================================== */
+
+        .chat-panel {
+            background: white;
+
+            border-radius: 18px;
+
+            border: 1px solid #e3e8f2;
+
+            box-shadow:
+                0 8px 25px rgba(30,45,80,0.07);
+
+            overflow: hidden;
+
+            min-height: 620px;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .chat-header {
+            padding: 20px 24px;
+
+            border-bottom: 1px solid #edf0f6;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+        }
+
+
+        .agent-profile {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+
+        .agent-avatar {
+            width: 46px;
+            height: 46px;
+
+            border-radius: 13px;
+
+            background: linear-gradient(
+                135deg,
+                #5139dd,
+                #7441ee
+            );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+        }
+
+
+        .agent-name {
+            font-size: 16px;
+            font-weight: 800;
+
+            color: #202e5b;
+        }
+
+
+        .agent-status {
+            margin-top: 4px;
+
+            font-size: 12px;
+
+            color: #16a34a;
+        }
+
+
+        .online-dot {
+            display: inline-block;
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+
+            margin-right: 4px;
+        }
+
+
+        /* =====================================================
+           CHAT MESSAGES
+        ===================================================== */
+
+        .chat-messages {
+            flex: 1;
+
+            padding: 28px;
+
+            overflow-y: auto;
+
+            min-height: 400px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #fbfcff,
+                    #f8faff
+                );
+        }
+
+
+        .message {
+            display: flex;
+
+            margin-bottom: 22px;
+
+            gap: 12px;
+        }
+
+
+        .message-avatar {
+            flex-shrink: 0;
+
+            width: 38px;
+            height: 38px;
+
+            border-radius: 11px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 18px;
+        }
+
+
+        .bot-avatar {
+            background: #e9e8ff;
+        }
+
+
+        .user-avatar {
+            background: #dce8ff;
+        }
+
+
+        .message-content {
+            max-width: 78%;
+        }
+
+
+        .message-name {
+            font-size: 11px;
+
+            font-weight: 700;
+
+            color: #747d91;
+
+            margin-bottom: 5px;
+        }
+
+
+        .message-bubble {
+            padding: 15px 17px;
+
+            border-radius: 5px 15px 15px 15px;
+
+            background: white;
+
+            border: 1px solid #e5e9f2;
+
+            color: #26324b;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            box-shadow:
+                0 3px 10px rgba(30,45,80,0.04);
+        }
+
+
+        .user-message {
+            flex-direction: row-reverse;
+        }
+
+
+        .user-message .message-content {
+            text-align: right;
+        }
+
+
+        .user-message .message-bubble {
+            background: #5139dd;
+
+            color: white;
+
+            border-radius: 15px 5px 15px 15px;
+
+            border: none;
+
+            text-align: left;
+        }
+
+
+        /* =====================================================
+           SUGGESTED QUESTIONS
+        ===================================================== */
+
+        .suggestions {
+            padding: 0 28px 18px;
+
+            background: #f8faff;
+        }
+
+
+        .suggestion-title {
+            font-size: 11px;
+
+            font-weight: 700;
+
+            color: #778097;
+
+            margin-bottom: 9px;
+        }
+
+
+        .suggestion-list {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+        }
+
+
+        .suggestion {
+            border: 1px solid #d9def0;
+
+            background: white;
+
+            color: #3e4a72;
+
+            border-radius: 20px;
+
+            padding: 8px 13px;
+
+            font-size: 12px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .suggestion:hover {
+            border-color: #5a42dc;
+
+            color: #5037d9;
+
+            background: #f2f0ff;
+        }
+
+
+        /* =====================================================
+           INPUT
+        ===================================================== */
+
+        .chat-input-area {
+            padding: 18px 22px;
+
+            border-top: 1px solid #e8ebf3;
+
+            background: white;
+        }
+
+
+        .input-wrapper {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            border: 1px solid #dce1ec;
+
+            border-radius: 13px;
+
+            padding: 7px 8px 7px 15px;
+
+            background: #fafbfe;
+
+            transition: 0.2s;
+        }
+
+
+        .input-wrapper:focus-within {
+            border-color: #6546e7;
+
+            box-shadow:
+                0 0 0 3px rgba(101,70,231,0.1);
+        }
+
+
+        #question {
+            flex: 1;
+
+            border: none;
+
+            outline: none;
+
+            background: transparent;
+
+            font-size: 14px;
+
+            color: #1f2937;
+
+            padding: 10px 0;
+        }
+
+
+        #question::placeholder {
+            color: #9aa2b2;
+        }
+
+
+        .send-button {
+            border: none;
+
+            background: linear-gradient(
+                135deg,
+                #5038d9,
+                #7139e9
+            );
+
+            color: white;
+
+            width: 45px;
+            height: 42px;
+
+            border-radius: 11px;
+
+            cursor: pointer;
+
+            font-size: 18px;
+
+            transition: 0.2s;
+        }
+
+
+        .send-button:hover {
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 6px 15px rgba(80,56,217,0.25);
+        }
+
+
+        .send-button:disabled {
+            opacity: 0.6;
+
+            cursor: not-allowed;
+        }
+
+
+        .input-note {
+            margin-top: 8px;
+
+            text-align: center;
+
+            font-size: 10px;
+
+            color: #9aa2b2;
+        }
+
+
+        /* =====================================================
+           LOADING
+        ===================================================== */
+
+        .typing {
+            display: none;
+
+            align-items: center;
+
+            gap: 5px;
+
+            padding: 13px 16px;
+
+            background: white;
+
+            border: 1px solid #e5e9f2;
+
+            border-radius: 5px 15px 15px 15px;
+
+            width: fit-content;
+        }
+
+
+        .typing span {
+            width: 7px;
+            height: 7px;
+
+            background: #725ee4;
+
+            border-radius: 50%;
+
+            animation: typing 1.2s infinite;
+        }
+
+
+        .typing span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+
+        .typing span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+
+        @keyframes typing {
+
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+
+            30% {
+                transform: translateY(-5px);
+                opacity: 1;
+            }
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1000px) {
+
+            .navbar {
+                height: auto;
+
+                padding: 18px;
+
+                flex-direction: column;
+
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+
+                justify-content: center;
+            }
+
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+
+            .side-panel {
+                display: none;
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            .container {
+                width: 95%;
+            }
+
+            .hero {
+                padding: 25px;
+            }
+
+            .hero-title {
+                font-size: 24px;
+            }
+
+            .chat-messages {
+                padding: 18px;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .nav-links a {
+                padding: 8px;
+                font-size: 12px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="navbar">
+
+    <div class="brand">
+        Criminal Analysis
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="/dashboard">
+            Dashboard
+        </a>
+
+        <a href="/cases">
+            Cases
+        </a>
+
+        <a href="/network">
+            Network Analysis
+        </a>
+
+        <a href="/patterns">
+            Crime Patterns
+        </a>
+
+        <a href="/connections">
+            Case Connections
+        </a>
+
+        <a href="/verify">
+            Document Verification
+        </a>
+
+        <a href="/ai-agent" class="active">
+            AI Agent
+        </a>
+
+        <a href="/logout" class="logout">
+            🚪 Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="container">
+
+
+    <!-- =====================================================
+         HERO
+    ===================================================== -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="hero-title">
+
+                <div class="robot-icon">
+                    🤖
+                </div>
+
+                AI Investigation Agent
+
+            </div>
+
+
+            <div class="hero-description">
+
+                Investigation support assistant for analyzing
+                FIR records, persons, relationships, repeated
+                entities and potential case connections.
+
+            </div>
+
+
+            <div class="status-pill">
+
+                <span class="status-dot"></span>
+
+                Local Investigation Agent — No External API Required
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         WORKSPACE
+    ===================================================== -->
+
+    <section class="workspace">
+
+
+        <!-- =================================================
+             SIDE PANEL
+        ================================================= -->
+
+        <aside class="side-panel">
+
+            <div class="side-title">
+                Investigation Tools
+            </div>
+
+
+            <div class="capability">
+
+                <div class="capability-icon">
+                    📁
+                </div>
+
+                <div class="capability-text">
+
+                    <strong>FIR Analysis</strong>
+
+                    <span>
+                        Search and analyze FIR records.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="capability">
+
+                <div class="capability-icon">
+                    👤
+                </div>
+
+                <div class="capability-text">
+
+                    <strong>Person Analysis</strong>
+
+                    <span>
+                        Find persons and related records.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="capability">
+
+                <div class="capability-icon">
+                    📱
+                </div>
+
+                <div class="capability-text">
+
+                    <strong>Phone Analysis</strong>
+
+                    <span>
+                        Find repeated phone numbers.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="capability">
+
+                <div class="capability-icon">
+                    🚗
+                </div>
+
+                <div class="capability-text">
+
+                    <strong>Vehicle Analysis</strong>
+
+                    <span>
+                        Identify repeated vehicles.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="capability">
+
+                <div class="capability-icon">
+                    📍
+                </div>
+
+                <div class="capability-text">
+
+                    <strong>Location Analysis</strong>
+
+                    <span>
+                        Find repeated locations.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="capability">
+
+                <div class="capability-icon">
+                    🔗
+                </div>
+
+                <div class="capability-text">
+
+                    <strong>Case Connections</strong>
+
+                    <span>
+                        Discover potential links between cases.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =================================================
+             CHAT PANEL
+        ================================================= -->
+
+        <section class="chat-panel">
+
+
+            <!-- CHAT HEADER -->
+
+            <div class="chat-header">
+
+                <div class="agent-profile">
+
+                    <div class="agent-avatar">
+                        🤖
+                    </div>
+
+                    <div>
+
+                        <div class="agent-name">
+                            AI Investigation Agent
+                        </div>
+
+                        <div class="agent-status">
+
+                            <span class="online-dot"></span>
+
+                            Ready to analyze dataset
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CHAT MESSAGES
+            ================================================= -->
+
+            <div class="chat-messages" id="chatMessages">
+
+
+                <!-- DEFAULT BOT MESSAGE -->
+
+                <div class="message">
+
+                    <div class="message-avatar bot-avatar">
+                        🤖
+                    </div>
+
+                    <div class="message-content">
+
+                        <div class="message-name">
+                            AI AGENT
+                        </div>
+
+                        <div class="message-bubble">
+
+                            Hello, {{ username }}! 👋
+
+                            <br><br>
+
+                            I can help you analyze the available
+                            criminal investigation dataset.
+
+                            <br><br>
+
+                            You can ask me about FIRs, persons,
+                            phone numbers, vehicles, locations
+                            and potential case connections.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TYPING -->
+
+                <div class="message" id="typingMessage">
+
+                    <div class="message-avatar bot-avatar">
+                        🤖
+                    </div>
+
+                    <div class="message-content">
+
+                        <div class="message-name">
+                            AI AGENT
+                        </div>
+
+                        <div class="typing" id="typing">
+
+                            <span></span>
+                            <span></span>
+                            <span></span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 SUGGESTIONS
+            ================================================= -->
+
+            <div class="suggestions">
+
+                <div class="suggestion-title">
+                    Suggested investigation questions
+                </div>
+
+
+                <div class="suggestion-list">
+
+                    <button
+                        class="suggestion"
+                        onclick="askSuggestion('Show all FIRs')">
+
+                        Show all FIRs
+
+                    </button>
+
+
+                    <button
+                        class="suggestion"
+                        onclick="askSuggestion('Find repeated persons')">
+
+                        Repeated persons
+
+                    </button>
+
+
+                    <button
+                        class="suggestion"
+                        onclick="askSuggestion('Find repeated phone numbers')">
+
+                        Repeated phones
+
+                    </button>
+
+
+                    <button
+                        class="suggestion"
+                        onclick="askSuggestion('Find repeated vehicles')">
+
+                        Repeated vehicles
+
+                    </button>
+
+
+                    <button
+                        class="suggestion"
+                        onclick="askSuggestion('Find repeated locations')">
+
+                        Repeated locations
+
+                    </button>
+
+
+                    <button
+                        class="suggestion"
+                        onclick="askSuggestion('Show case connections')">
+
+                        Case connections
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 INPUT
+            ================================================= -->
+
+            <div class="chat-input-area">
+
+                <div class="input-wrapper">
+
+                    <input
+                        type="text"
+                        id="question"
+                        placeholder="Ask an investigation question..."
+                        autocomplete="off"
+                    >
+
+
+                    <button
+                        class="send-button"
+                        id="sendButton"
+                        onclick="sendQuestion()">
+
+                        ➤
+
+                    </button>
+
+                </div>
+
+
+                <div class="input-note">
+
+                    AI responses are based only on the available
+                    investigation dataset.
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </section>
+
+</main>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+
+const questionInput =
+    document.getElementById("question");
+
+const chatMessages =
+    document.getElementById("chatMessages");
+
+const sendButton =
+    document.getElementById("sendButton");
+
+const typingMessage =
+    document.getElementById("typingMessage");
+
+const typing =
+    document.getElementById("typing");
+
+
+
+/* ============================================================
+   ENTER KEY
+============================================================ */
+
+questionInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            sendQuestion();
+
+        }
+
+    }
+);
+
+
+
+/* ============================================================
+   SUGGESTION
+============================================================ */
+
+function askSuggestion(question) {
+
+    questionInput.value = question;
+
+    sendQuestion();
+
+}
+
+
+
+/* ============================================================
+   ADD USER MESSAGE
+============================================================ */
+
+function addUserMessage(question) {
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message user-message";
+
+
+    message.innerHTML = `
+
+        <div class="message-avatar user-avatar">
+            👮
+        </div>
+
+        <div class="message-content">
+
+            <div class="message-name">
+                YOU
+            </div>
+
+            <div class="message-bubble">
+                ${escapeHtml(question)}
+            </div>
+
+        </div>
+
+    `;
+
+
+    chatMessages.insertBefore(
+        message,
+        typingMessage
+    );
+
+
+    scrollChat();
+
+}
+
+
+
+/* ============================================================
+   ADD BOT MESSAGE
+============================================================ */
+
+function addBotMessage(answer) {
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message";
+
+
+    message.innerHTML = `
+
+        <div class="message-avatar bot-avatar">
+            🤖
+        </div>
+
+        <div class="message-content">
+
+            <div class="message-name">
+                AI AGENT
+            </div>
+
+            <div class="message-bubble">
+                ${formatAnswer(answer)}
+            </div>
+
+        </div>
+
+    `;
+
+
+    chatMessages.insertBefore(
+        message,
+        typingMessage
+    );
+
+
+    scrollChat();
+
+}
+
+
+
+/* ============================================================
+   SEND QUESTION
+============================================================ */
+
+async function sendQuestion() {
+
+    const question =
+        questionInput.value.trim();
+
+
+    if (!question) {
+
+        questionInput.focus();
+
+        return;
+
+    }
+
+
+    addUserMessage(question);
+
+
+    questionInput.value = "";
+
+
+    sendButton.disabled = true;
+
+    typingMessage.style.display =
+        "flex";
+
+    typing.style.display =
+        "flex";
+
+
+    scrollChat();
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/ai-agent/ask",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        question: question
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        typingMessage.style.display =
+            "none";
+
+
+        if (data.answer) {
+
+            addBotMessage(
+                data.answer
+            );
+
+        }
+
+        else {
+
+            addBotMessage(
+                "The investigation agent did not return an answer."
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+
+        typingMessage.style.display =
+            "none";
+
+
+        addBotMessage(
+            "Unable to connect to the investigation agent. Please make sure the Flask server is running."
+        );
+
+    }
+
+
+    sendButton.disabled = false;
+
+    questionInput.focus();
+
+}
+
+
+
+/* ============================================================
+   FORMAT ANSWER
+============================================================ */
+
+function formatAnswer(answer) {
+
+    if (!answer) {
+        return "";
+    }
+
+
+    let text =
+        escapeHtml(answer);
+
+
+    text =
+        text.replace(
+            /\n/g,
+            "<br>"
+        );
+
+
+    return text;
+
+}
+
+
+
+/* ============================================================
+   HTML ESCAPE
+============================================================ */
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
+
+}
+
+
+
+/* ============================================================
+   SCROLL CHAT
+============================================================ */
+
+function scrollChat() {
+
+    setTimeout(
+        function() {
+
+            chatMessages.scrollTop =
+                chatMessages.scrollHeight;
+
+        },
+        50
+    );
+
+}
+
+</script>
+
+
+</body>
+</html>

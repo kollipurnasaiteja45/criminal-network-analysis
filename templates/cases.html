@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Case Management - NEXGOV</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="header">
+
+        <div class="logo">
+    Criminal Analysis
+</div>
+
+        <nav>
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/cases" class="active">
+                Cases
+            </a>
+
+            <a href="/network">
+                Network Analysis
+            </a>
+
+            <a href="/verify">
+                Document Verification
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="container">
+
+        <div class="page-header">
+
+            <div>
+
+                <h1>Case Management</h1>
+
+                <p>
+                    Search and investigate registered FIR cases.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SEARCH
+        ================================================== -->
+
+        <div class="search-box">
+
+            <form action="/cases" method="GET">
+
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search FIR, person, phone, vehicle or location..."
+                    value="{{ search }}"
+                >
+
+                <button type="submit">
+                    Search
+                </button>
+
+                {% if search %}
+
+                    <a href="/cases" class="clear-button">
+                        Clear
+                    </a>
+
+                {% endif %}
+
+            </form>
+
+        </div>
+
+
+        <!-- =================================================
+             CASE COUNT
+        ================================================== -->
+
+        <div class="case-summary">
+
+            <h3>
+                {% if search %}
+                    Search Results
+                {% else %}
+                    Registered Cases
+                {% endif %}
+            </h3>
+
+            <span>
+                {{ cases|length }} case(s)
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             CASE TABLE
+        ================================================== -->
+
+        {% if cases %}
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>FIR ID</th>
+
+                        <th>Person</th>
+
+                        <th>Phone</th>
+
+                        <th>Vehicle</th>
+
+                        <th>Location</th>
+
+                        <th>Investigation</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for case in cases %}
+
+                    <tr>
+
+                        <!-- FIR -->
+
+                        <td>
+                            <strong>
+                                {{ case.fir_id }}
+                            </strong>
+                        </td>
+
+
+                        <!-- PERSON -->
+
+                        <td>
+                            {{ case.person }}
+                        </td>
+
+
+                        <!-- PHONE -->
+
+                        <td>
+                            {{ case.phone }}
+                        </td>
+
+
+                        <!-- VEHICLE -->
+
+                        <td>
+                            {{ case.vehicle }}
+                        </td>
+
+
+                        <!-- LOCATION -->
+
+                        <td>
+                            {{ case.location }}
+                        </td>
+
+
+                        <!-- INVESTIGATION -->
+
+                        <td>
+
+                            <a
+                                href="/case/{{ case.fir_id }}"
+                                class="investigate-link"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="investigate-button"
+                                >
+                                    Investigate
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+        <!-- =================================================
+             NO CASES
+        ================================================== -->
+
+        <div class="no-results">
+
+            <div class="no-results-icon">
+                🔍
+            </div>
+
+            <h2>
+                No Cases Found
+            </h2>
+
+            {% if search %}
+
+            <p>
+                No cases match your search for
+                <strong>"{{ search }}"</strong>.
+            </p>
+
+            <a href="/cases">
+
+                <button>
+                    Show All Cases
+                </button>
+
+            </a>
+
+            {% else %}
+
+            <p>
+                There are currently no cases available
+                in the dataset.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- =================================================
+             INFORMATION
+        ================================================== -->
+
+        <div class="case-info">
+
+            <h3>
+                Investigation Support
+            </h3>
+
+            <p>
+                Select <strong>Investigate</strong> to view
+                the available information associated with
+                an FIR, including the person, phone,
+                vehicle and location.
+            </p>
+
+            <p>
+                The system provides investigative support
+                based on the available dataset and does not
+                determine guilt or innocence.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             BACK TO DASHBOARD
+        ================================================== -->
+
+        <div class="back-section">
+
+            <a href="/dashboard">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            NEXGOV | Criminal Network Analysis System
+        </p>
+
+        <p>
+            Investigation Support Prototype
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

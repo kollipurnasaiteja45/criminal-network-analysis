@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Dashboard - Criminal Analysis
+    </title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js">
+    </script>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+
+    <div class="logo">
+
+        🕵️ Criminal Analysis
+
+    </div>
+
+
+    <nav>
+
+        <a href="/dashboard"
+           class="active">
+
+            Dashboard
+
+        </a>
+
+
+        <a href="/cases">
+
+            Cases
+
+        </a>
+
+
+        <a href="/network">
+
+            Network Analysis
+
+        </a>
+
+
+        <a href="/patterns">
+
+            Crime Patterns
+
+        </a>
+
+
+        <a href="/connections">
+
+            Case Connections
+
+        </a>
+
+
+        <a href="/verify">
+
+            Document Verification
+
+        </a>
+
+
+        <a href="/logout"
+           class="logout-button">
+
+            🚪 Logout
+
+        </a>
+
+    </nav>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="container">
+
+
+    <!-- =====================================================
+         USER INFORMATION
+    ====================================================== -->
+
+    <section class="welcome">
+
+
+        <div>
+
+            <h1>
+                Welcome, {{ username }}
+            </h1>
+
+            <p>
+                Criminal Network Analysis and
+                Investigation Support System
+            </p>
+
+        </div>
+
+
+        <div class="user-role-badge">
+
+            🔐 {{ role }}
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         AUTHORIZED ACCESS
+    ====================================================== -->
+
+    <section class="authorized-dashboard">
+
+        <div>
+
+            <strong>
+                ✓ Authorized Session
+            </strong>
+
+            <p>
+                You are logged in as
+                <strong>{{ role }}</strong>.
+                Access is restricted to authorized users.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <section class="stats-grid">
+
+
+        <!-- FIRs -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📄
+            </div>
+
+            <div>
+
+                <h3>
+                    Total FIRs
+                </h3>
+
+                <strong>
+                    {{ total_firs }}
+                </strong>
+
+                <p>
+                    Registered cases
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PERSONS -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                👤
+            </div>
+
+            <div>
+
+                <h3>
+                    Persons
+                </h3>
+
+                <strong>
+                    {{ total_persons }}
+                </strong>
+
+                <p>
+                    Persons in dataset
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- LOCATIONS -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📍
+            </div>
+
+            <div>
+
+                <h3>
+                    Locations
+                </h3>
+
+                <strong>
+                    {{ total_locations }}
+                </strong>
+
+                <p>
+                    Recorded locations
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- VEHICLES -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🚗
+            </div>
+
+            <div>
+
+                <h3>
+                    Vehicles
+                </h3>
+
+                <strong>
+                    {{ total_vehicles }}
+                </strong>
+
+                <p>
+                    Recorded vehicles
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         CHART
+    ====================================================== -->
+
+    <section class="pattern-section">
+
+
+        <h2>
+            📊 Investigation Dataset Overview
+        </h2>
+
+
+        <p>
+            Current distribution of records available
+            in the investigation dataset.
+        </p>
+
+
+        <div class="chart-container">
+
+            <canvas id="overviewChart"></canvas>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         INVESTIGATION MODULES
+    ====================================================== -->
+
+    <section class="pattern-section">
+
+
+        <h2>
+            🕵️ Investigation Modules
+        </h2>
+
+
+        <p>
+            Select an authorized investigation support
+            module.
+        </p>
+
+
+        <div class="stats-grid">
+
+
+            <!-- ADD FIR -->
+
+            <div class="stat-card add-fir-card">
+
+                <div class="stat-icon">
+                    ➕
+                </div>
+
+                <div>
+
+                    <h3>
+                        Add New FIR
+                    </h3>
+
+                    <p>
+                        Add a new FIR record to the
+                        investigation dataset.
+                    </p>
+
+                    <a href="/add-fir">
+                        Add New FIR →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CASES -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📄
+                </div>
+
+                <div>
+
+                    <h3>
+                        Case Management
+                    </h3>
+
+                    <p>
+                        Search and investigate FIR records.
+                    </p>
+
+                    <a href="/cases">
+                        Open Cases →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NETWORK -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🕸️
+                </div>
+
+                <div>
+
+                    <h3>
+                        Network Analysis
+                    </h3>
+
+                    <p>
+                        Explore relationships between
+                        persons, FIRs and entities.
+                    </p>
+
+                    <a href="/network">
+                        Open Network →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PATTERNS -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📊
+                </div>
+
+                <div>
+
+                    <h3>
+                        Crime Patterns
+                    </h3>
+
+                    <p>
+                        Find repeated entities across
+                        available FIR records.
+                    </p>
+
+                    <a href="/patterns">
+                        Analyze Patterns →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CONNECTIONS -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🔗
+                </div>
+
+                <div>
+
+                    <h3>
+                        Case Connections
+                    </h3>
+
+                    <p>
+                        Find potential shared entities
+                        between cases.
+                    </p>
+
+                    <a href="/connections">
+                        View Connections →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- VERIFICATION -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📑
+                </div>
+
+                <div>
+
+                    <h3>
+                        Document Verification
+                    </h3>
+
+                    <p>
+                        Compare uploaded FIR documents
+                        with the local dataset.
+                    </p>
+
+                    <a href="/verify">
+                        Verify Document →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SYSTEM CAPABILITIES
+    ====================================================== -->
+
+    <section class="pattern-section">
+
+
+        <h2>
+            ⚙️ System Capabilities
+        </h2>
+
+
+        <div class="summary-grid">
+
+
+            <div class="summary-item">
+
+                <h3>
+                    🔎 FIR Search
+                </h3>
+
+                <p>
+                    Search FIR records using available
+                    case information.
+                </p>
+
+            </div>
+
+
+
+            <div class="summary-item">
+
+                <h3>
+                    🕸️ Network Mapping
+                </h3>
+
+                <p>
+                    Visualize relationships between
+                    persons, FIRs, phones, vehicles
+                    and locations.
+                </p>
+
+            </div>
+
+
+
+            <div class="summary-item">
+
+                <h3>
+                    🔗 Case Connections
+                </h3>
+
+                <p>
+                    Detect potential shared information
+                    across FIR records.
+                </p>
+
+            </div>
+
+
+
+            <div class="summary-item">
+
+                <h3>
+                    📈 Pattern Analysis
+                </h3>
+
+                <p>
+                    Identify repeated entities in
+                    the available dataset.
+                </p>
+
+            </div>
+
+
+
+            <div class="summary-item">
+
+                <h3>
+                    📑 Document Verification
+                </h3>
+
+                <p>
+                    Extract information from PDF or TXT
+                    documents and compare it with records.
+                </p>
+
+            </div>
+
+
+
+            <div class="summary-item">
+
+                <h3>
+                    ➕ FIR Registration
+                </h3>
+
+                <p>
+                    Authorized users can add new FIR
+                    records to the local dataset.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         QUICK ACTIONS
+    ====================================================== -->
+
+    <section class="pattern-section">
+
+
+        <h2>
+            ⚡ Quick Actions
+        </h2>
+
+
+        <div class="fir-actions">
+
+
+            <a href="/add-fir">
+                ➕ Add New FIR
+            </a>
+
+
+            <a href="/cases">
+                📄 View All Cases
+            </a>
+
+
+            <a href="/network">
+                🕸️ Open Network
+            </a>
+
+
+            <a href="/patterns">
+                📊 Check Patterns
+            </a>
+
+
+            <a href="/connections">
+                🔗 Case Connections
+            </a>
+
+
+            <a href="/verify">
+                📑 Verify Document
+            </a>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SECURITY NOTICE
+    ====================================================== -->
+
+    <section class="case-info">
+
+
+        <h3>
+            🔐 Authorized Access Notice
+        </h3>
+
+
+        <p>
+            This system is intended for authorized
+            investigation personnel only.
+        </p>
+
+
+        <p>
+            Network relationships, repeated patterns and
+            document verification results are generated
+            from the available dataset and should be
+            treated as investigation-support information.
+        </p>
+
+
+        <p>
+            System results do not establish criminal
+            responsibility, guilt or innocence.
+        </p>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    <p>
+        Criminal Analysis |
+        Criminal Network Analysis System
+    </p>
+
+
+    <p>
+        Authorized Investigation Support Prototype
+    </p>
+
+</footer>
+
+
+
+<!-- =========================================================
+     DASHBOARD DATA
+========================================================= -->
+
+<script id="dashboard-data"
+        type="application/json">
+
+{{
+    {
+        "firs": total_firs,
+        "persons": total_persons,
+        "locations": total_locations,
+        "vehicles": total_vehicles
+    } | tojson
+}}
+
+</script>
+
+
+
+<!-- =========================================================
+     CHART
+========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const dataElement =
+            document.getElementById(
+                "dashboard-data"
+            );
+
+
+        if (!dataElement) {
+            return;
+        }
+
+
+        const dashboardData =
+            JSON.parse(
+                dataElement.textContent
+            );
+
+
+        const chartElement =
+            document.getElementById(
+                "overviewChart"
+            );
+
+
+        if (!chartElement) {
+            return;
+        }
+
+
+        new Chart(
+
+            chartElement,
+
+            {
+
+                type: "bar",
+
+
+                data: {
+
+                    labels: [
+
+                        "FIRs",
+
+                        "Persons",
+
+                        "Locations",
+
+                        "Vehicles"
+
+                    ],
+
+
+                    datasets: [
+
+                        {
+
+                            label:
+                                "Records",
+
+                            data: [
+
+                                dashboardData.firs,
+
+                                dashboardData.persons,
+
+                                dashboardData.locations,
+
+                                dashboardData.vehicles
+
+                            ],
+
+                            borderWidth: 1
+
+                        }
+
+                    ]
+
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+
+                    plugins: {
+
+                        legend: {
+
+                            display: true
+
+                        }
+
+                    },
+
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            ticks: {
+
+                                precision: 0
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+    }
+
+);
+
+</script>
+
+
+</body>
+
+</html>

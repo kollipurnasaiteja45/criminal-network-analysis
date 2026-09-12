@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Crime Pattern Analysis - NEXGOV</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="header">
+
+        <div class="logo">
+    Criminal Analysis
+</div>
+
+
+        <nav>
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/cases">
+                Cases
+            </a>
+
+            <a href="/network">
+                Network Analysis
+            </a>
+
+            <a href="/patterns" class="active">
+                Crime Patterns
+            </a>
+
+            <a href="/verify">
+                Document Verification
+            </a>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="container">
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <section class="welcome">
+
+            <h1>
+                Crime Pattern Analysis
+            </h1>
+
+            <p>
+                Analyze repeated entities across available
+                FIR records.
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SUMMARY CARDS
+        ================================================== -->
+
+        <section class="stats-grid">
+
+
+            <!-- PERSONS -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👤
+                </div>
+
+                <div>
+
+                    <h3>
+                        Repeated Persons
+                    </h3>
+
+                    <p class="stat-number">
+                        {{ patterns.persons|length }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PHONES -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📞
+                </div>
+
+                <div>
+
+                    <h3>
+                        Repeated Phones
+                    </h3>
+
+                    <p class="stat-number">
+                        {{ patterns.phones|length }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- VEHICLES -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🚗
+                </div>
+
+                <div>
+
+                    <h3>
+                        Repeated Vehicles
+                    </h3>
+
+                    <p class="stat-number">
+                        {{ patterns.vehicles|length }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- LOCATIONS -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📍
+                </div>
+
+                <div>
+
+                    <h3>
+                        Repeated Locations
+                    </h3>
+
+                    <p class="stat-number">
+                        {{ patterns.locations|length }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             PATTERN OVERVIEW CHART
+        ================================================== -->
+
+        <section class="pattern-section">
+
+            <h2>
+                Pattern Overview
+            </h2>
+
+            <p>
+                Number of entities appearing in more than
+                one FIR record.
+            </p>
+
+
+            <div class="chart-container">
+
+                <canvas id="patternChart"></canvas>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             REPEATED PERSONS
+        ================================================== -->
+
+        <section class="pattern-section">
+
+            <h2>
+                👤 Repeated Persons
+            </h2>
+
+
+            {% if patterns.persons %}
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Person
+                            </th>
+
+                            <th>
+                                Number of Cases
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in patterns.persons %}
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    {{ item.value }}
+                                </strong>
+                            </td>
+
+
+                            <td>
+                                {{ item.count }}
+                            </td>
+
+
+                            <td>
+
+                                <a href="/person/{{ item.value }}">
+                                    View Network
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+            <div class="no-pattern">
+
+                No repeated persons found.
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+
+        <!-- =================================================
+             REPEATED PHONE NUMBERS
+        ================================================== -->
+
+        <section class="pattern-section">
+
+            <h2>
+                📞 Repeated Phone Numbers
+            </h2>
+
+
+            {% if patterns.phones %}
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Phone Number
+                            </th>
+
+                            <th>
+                                Number of Cases
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in patterns.phones %}
+
+                        <tr>
+
+                            <td>
+                                {{ item.value }}
+                            </td>
+
+                            <td>
+                                {{ item.count }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+            <div class="no-pattern">
+
+                No repeated phone numbers found.
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+
+        <!-- =================================================
+             REPEATED VEHICLES
+        ================================================== -->
+
+        <section class="pattern-section">
+
+            <h2>
+                🚗 Repeated Vehicles
+            </h2>
+
+
+            {% if patterns.vehicles %}
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Vehicle Number
+                            </th>
+
+                            <th>
+                                Number of Cases
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in patterns.vehicles %}
+
+                        <tr>
+
+                            <td>
+                                {{ item.value }}
+                            </td>
+
+                            <td>
+                                {{ item.count }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+            <div class="no-pattern">
+
+                No repeated vehicles found.
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+
+        <!-- =================================================
+             REPEATED LOCATIONS
+        ================================================== -->
+
+        <section class="pattern-section">
+
+            <h2>
+                📍 Repeated Locations
+            </h2>
+
+
+            {% if patterns.locations %}
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Location
+                            </th>
+
+                            <th>
+                                Number of Cases
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in patterns.locations %}
+
+                        <tr>
+
+                            <td>
+                                {{ item.value }}
+                            </td>
+
+                            <td>
+                                {{ item.count }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+            <div class="no-pattern">
+
+                No repeated locations found.
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+
+        <!-- =================================================
+             INVESTIGATION NOTICE
+        ================================================== -->
+
+        <section class="case-info">
+
+            <h3>
+                ⚠ Investigation Notice
+            </h3>
+
+            <p>
+                Repeated entities indicate potential
+                connections within the available dataset.
+            </p>
+
+            <p>
+                These results are intended as investigation
+                support indicators and do not establish
+                guilt or innocence.
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             NAVIGATION
+        ================================================== -->
+
+        <div class="back-section">
+
+            <a href="/dashboard">
+                ← Dashboard
+            </a>
+
+            &nbsp;&nbsp;
+
+            <a href="/cases">
+                Case Management
+            </a>
+
+            &nbsp;&nbsp;
+
+            <a href="/network">
+                Network Analysis
+            </a>
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            NEXGOV | Criminal Network Analysis System
+        </p>
+
+        <p>
+            Investigation Support Prototype
+        </p>
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         PATTERN DATA
+         
+         IMPORTANT:
+         Jinja is kept inside JSON so VS Code does not
+         interpret it as normal JavaScript.
+    ====================================================== -->
+
+    <script id="pattern-data"
+            type="application/json">
+
+        {{ {
+            "persons": patterns.persons|length,
+            "phones": patterns.phones|length,
+            "vehicles": patterns.vehicles|length,
+            "locations": patterns.locations|length
+        } | tojson }}
+
+    </script>
+
+
+
+    <!-- =====================================================
+         CHART JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        const patternDataElement =
+            document.getElementById("pattern-data");
+
+
+        const patternData =
+            JSON.parse(
+                patternDataElement.textContent
+            );
+
+
+        const personCount =
+            patternData.persons;
+
+
+        const phoneCount =
+            patternData.phones;
+
+
+        const vehicleCount =
+            patternData.vehicles;
+
+
+        const locationCount =
+            patternData.locations;
+
+
+        const chartCanvas =
+            document.getElementById("patternChart");
+
+
+        new Chart(chartCanvas, {
+
+            type: "bar",
+
+
+            data: {
+
+                labels: [
+
+                    "Persons",
+
+                    "Phones",
+
+                    "Vehicles",
+
+                    "Locations"
+
+                ],
+
+
+                datasets: [
+
+                    {
+
+                        label:
+                            "Repeated Entities",
+
+
+                        data: [
+
+                            personCount,
+
+                            phoneCount,
+
+                            vehicleCount,
+
+                            locationCount
+
+                        ]
+
+                    }
+
+                ]
+
+            },
+
+
+            options: {
+
+                responsive: true,
+
+
+                maintainAspectRatio: true,
+
+
+                plugins: {
+
+                    legend: {
+
+                        display: true
+
+                    }
+
+                },
+
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+
+                        ticks: {
+
+                            stepSize: 1
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    </script>
+
+
+</body>
+
+</html>
